@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const TASK_COUNT = 3;
 
@@ -8,8 +8,8 @@ const siteHeaderFiltersElement = siteHeaderTripElement.querySelector(`.trip-cont
 const siteMainEventElement = document.querySelector(`.trip-events`);
 
 const tripInfo = () => {
-    return (
-        `<section class="trip-main__trip-info  trip-info">
+  return (
+    `<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
                 <h1 class="trip-info__title">Amsterdam — Chamonix — Geneva</h1>
 
@@ -20,21 +20,21 @@ const tripInfo = () => {
                 Total: €&nbsp;<span class="trip-info__cost-value">1230</span>
             </p>
         </section>`
-    );
+  );
 };
 
 const tripControls = () => {
-    return (
-        `<nav class="trip-controls__trip-tabs  trip-tabs">
+  return (
+    `<nav class="trip-controls__trip-tabs  trip-tabs">
             <a class="trip-tabs__btn  trip-tabs__btn--active" href="#">Table</a>
             <a class="trip-tabs__btn" href="#">Stats</a>
         </nav>`
-    );
+  );
 };
 
 const tripFilters = () => {
-    return (
-        `<form class="trip-filters" action="#" method="get">
+  return (
+    `<form class="trip-filters" action="#" method="get">
             <div class="trip-filters__filter">
                 <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything" checked="">
                     <label class="trip-filters__filter-label" for="filter-everything">Everything</label>
@@ -52,12 +52,12 @@ const tripFilters = () => {
 
             <button class="visually-hidden" type="submit">Accept filter</button>
         </form>`
-    );
+  );
 };
 
 const tripSort = () =>{
-    return (
-        `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+  return (
+    `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
             <span class="trip-sort__item  trip-sort__item--day">Day</span>
 
             <div class="trip-sort__item  trip-sort__item--event">
@@ -87,12 +87,12 @@ const tripSort = () =>{
 
             <span class="trip-sort__item  trip-sort__item--offers">Offers</span>
           </form>`
-    );
+  );
 };
 
 const tripDay = () => {
-    return (
-        `<ul class="trip-days">
+  return (
+    `<ul class="trip-days">
             <li class="trip-days__item  day">
               <div class="day__info">
                 <span class="day__counter">1</span>
@@ -102,12 +102,12 @@ const tripDay = () => {
               </ul>
             </li>
         </ul>`
-    );
+  );
 };
 
 const tripItem = () => {
-    return (
-        `<li class="trip-events__item">
+  return (
+    `<li class="trip-events__item">
             <div class="event">
                 <div class="event__type">
                     <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
@@ -141,12 +141,12 @@ const tripItem = () => {
                 </button>
             </div>
         </li>`
-    );
+  );
 };
 
 const tripEdit = () => {
-    return (
-        `<li class="trip-events__item">
+  return (
+    `<li class="trip-events__item">
             <form class="event  event--edit" action="#" method="post">
                 <header class="event__header">
                     <div class="event__type-wrapper">
@@ -319,16 +319,16 @@ const tripEdit = () => {
                 </section>        
             </form>      
         </li>`
-    )
-}
+  );
+};
 
 
 const render = (place, temlate, position) => {
-    place.insertAdjacentHTML(position, temlate);
+  place.insertAdjacentHTML(position, temlate);
 };
 
 render(siteHeaderTripElement, tripInfo(), `afterbegin`);
-render(siteHeaderMenuElement, tripControls(),`afterend`);
+render(siteHeaderMenuElement, tripControls(), `afterend`);
 render(siteHeaderFiltersElement, tripFilters(), `afterend`);
 render(siteMainEventElement, tripSort(), `beforeend`);
 render(siteMainEventElement, tripDay(), `beforeend`);
@@ -338,5 +338,5 @@ const siteTripItemElement = siteMainEventElement.querySelector(`.trip-events__li
 render(siteTripItemElement, tripEdit(), `afterbegin`);
 
 for (let i = 0; i < TASK_COUNT; i++) {
-    render(siteTripItemElement, tripItem(), `beforeend`);
+  render(siteTripItemElement, tripItem(), `beforeend`);
 }
