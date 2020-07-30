@@ -7,7 +7,7 @@ const siteHeaderMenuElement = siteHeaderTripElement.querySelector(`.trip-control
 const siteHeaderFiltersElement = siteHeaderTripElement.querySelector(`.trip-controls_filters`);
 const siteMainEventElement = document.querySelector(`.trip-events`);
 
-const tripTitle= () => {
+const tripTitle = () => {
   return (
     `<section class="trip-main__trip-info  trip-info">
         <div class="trip-info__main">
@@ -23,8 +23,8 @@ const tripCost = () => {
     `<p class="trip-info__cost">
         Total: €&nbsp;<span class="trip-info__cost-value">1230</span>
     </p>`
-  )
-}
+  );
+};
 
 const tripControls = () => {
   return (
