@@ -7,21 +7,24 @@ const siteHeaderMenuElement = siteHeaderTripElement.querySelector(`.trip-control
 const siteHeaderFiltersElement = siteHeaderTripElement.querySelector(`.trip-controls_filters`);
 const siteMainEventElement = document.querySelector(`.trip-events`);
 
-const tripInfo = () => {
+const tripTitle= () => {
   return (
     `<section class="trip-main__trip-info  trip-info">
-            <div class="trip-info__main">
-                <h1 class="trip-info__title">Amsterdam — Chamonix — Geneva</h1>
-
-                <p class="trip-info__dates">Mar 18&nbsp;—&nbsp;20</p>
-            </div>
-
-            <p class="trip-info__cost">
-                Total: €&nbsp;<span class="trip-info__cost-value">1230</span>
-            </p>
-        </section>`
+        <div class="trip-info__main">
+          <h1 class="trip-info__title">Amsterdam — Chamonix — Geneva</h1>
+          <p class="trip-info__dates">Mar 18&nbsp;—&nbsp;20</p>
+        </div>           
+    </section>`
   );
 };
+
+const tripCost = () => {
+  return (
+    `<p class="trip-info__cost">
+        Total: €&nbsp;<span class="trip-info__cost-value">1230</span>
+    </p>`
+  )
+}
 
 const tripControls = () => {
   return (
@@ -327,7 +330,11 @@ const render = (place, temlate, position) => {
   place.insertAdjacentHTML(position, temlate);
 };
 
-render(siteHeaderTripElement, tripInfo(), `afterbegin`);
+render(siteHeaderTripElement, tripTitle(), `afterbegin`);
+
+const siteHeaderCostElement = siteHeaderTripElement.querySelector(`.trip-info`);
+
+render(siteHeaderCostElement, tripCost(), `beforeend`);
 render(siteHeaderMenuElement, tripControls(), `afterend`);
 render(siteHeaderFiltersElement, tripFilters(), `afterend`);
 render(siteMainEventElement, tripSort(), `beforeend`);
