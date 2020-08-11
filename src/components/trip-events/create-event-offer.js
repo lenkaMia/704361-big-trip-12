@@ -1,4 +1,4 @@
-export const createItemOffer = (offers) => {
+export const createEventOffer = (offers) => {
   return offers.map((offer) => {
     const { title, price } = offer;
 
