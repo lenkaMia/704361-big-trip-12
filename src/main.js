@@ -29,20 +29,10 @@ renderElement(tripControlsFilter, tripFilter(MAIN_FILTERS), `afterend`);
 
 const tripEvents = document.querySelector(`.trip-events`);
 renderElement(tripEvents, tripSort(SORT_FILTERS), `beforeend`);
-// renderElement(tripEvents, tripEdittor(getTripEvent()), `afterbegin`);
-
-// Дни
 
 renderElement(tripEvents, daysContainer(), `beforeend`);
 
 const tripDays = tripEvents.querySelector(`.trip-days`);
-// renderElement(tripDays, day(), `beforeend`);
-
-// const days = document.querySelector(`.day`);
-
-// // События
-
-// renderElement(days, tripEventsContainer(), `beforeend`);
 
 dates.forEach((date, dateIndex) => {
   const day = createElement(getDayItem(new Date(date), dateIndex + 1));
@@ -62,11 +52,3 @@ dates.forEach((date, dateIndex) => {
 const getFullPrice = generetedEvents.reduce((acc, item) => acc + item.price, 0);
 
 document.querySelector(`.trip-info__cost-value`).textContent = getFullPrice;
-// const eventsContainer = tripEvents.querySelector(`.trip-events__list`);
-// const tripItems = generateTripEvents(TASK_COUNT);
-
-// for (let i = 0; i < TASK_COUNT; i++) {
-//   console.log(tripItems)
-//   renderElement(eventsContainer, tripEvent(tripItems[i]), `beforeend`);
-// ;
-// }
