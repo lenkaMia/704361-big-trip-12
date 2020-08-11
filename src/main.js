@@ -19,7 +19,7 @@ const tripMain = document.querySelector(`.trip-main`);
 renderElement(tripMain, tripTitle(), `afterbegin`);
 
 const tripInfoContainer = tripMain.querySelector(`.trip-info`);
-renderElement(tripInfoContainer, tripCost(),);
+renderElement(tripInfoContainer, tripCost());
 
 const tripControlsNav = tripMain.querySelector(`.trip-controls_menu`);
 renderElement(tripControlsNav, pageNavigation(), `afterend`);
@@ -28,9 +28,9 @@ const tripControlsFilter = tripMain.querySelector(`.trip-controls_filters`);
 renderElement(tripControlsFilter, tripFilter(MAIN_FILTERS), `afterend`);
 
 const tripEvents = document.querySelector(`.trip-events`);
-renderElement(tripEvents, tripSort(SORT_FILTERS),);
+renderElement(tripEvents, tripSort(SORT_FILTERS));
 
-renderElement(tripEvents, daysContainer(),);
+renderElement(tripEvents, daysContainer());
 
 const tripDays = tripEvents.querySelector(`.trip-days`);
 
@@ -46,7 +46,7 @@ dates.forEach((date, dateIndex) => {
       );
     });
 
-  renderElement(tripDays, day.parentElement.innerHTML,);
+  renderElement(tripDays, day.parentElement.innerHTML);
 });
 
 const getFullPrice = generetedEvents.reduce((acc, item) => acc + item.price, 0);
