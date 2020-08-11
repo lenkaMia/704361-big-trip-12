@@ -1,18 +1,21 @@
-import {tripTitle} from "./view/trip-title.js";
-import {tripCost} from "./view/trip-cost.js";
-import {tripControl} from "./view/trip-control.js";
-import {tripFilter} from "./view/trip-filter.js";
-import {tripSort} from "./view/trip-sort.js";
-import {tripDay} from "./view/trip-day.js";
-import {tripItem} from "./view/trip-item.js";
-import {tripEdittor} from "./view/trip-edittor.js"
+import {tripTitle} from "./components/header/trip-title.js";
+import {tripCost} from "./components/header/trip-cost.js";
+import {pageNavigation} from "./components/header/page-navigation.js";
+import {tripFilter} from "./components/header/trip-filter.js";
+import {tripSort} from "./components/trip-sort.js";
+import { tripDay } from "./components/trip-day.js";
+import {tripItem} from "./components/trip-items/trip-item.js";
+import {tripEdittor} from "./components/trip-edittor.js";
+import {getTripItems} from "./mock/trip.js";
+import {SORT_FILTERS, MAIN_FILTERS} from "./const.js";
 
-const TASK_COUNT = 3;
+const TASK_COUNT = 4;
+const tripItems = getTripItems(TASK_COUNT);
 
 const siteHeaderTripElement = document.querySelector(`.trip-main`);
 const siteHeaderMenuElement = siteHeaderTripElement.querySelector(`.trip-controls_menu`);
 const siteHeaderFiltersElement = siteHeaderTripElement.querySelector(`.trip-controls_filters`);
-const siteMainEventElement = document.querySelector(`.trip-events`);
+const siteTripEventsElement = document.querySelector(`.trip-events`);
 
 const render = (place, temlate, position) => {
   place.insertAdjacentHTML(position, temlate);
@@ -23,15 +26,17 @@ render(siteHeaderTripElement, tripTitle(), `afterbegin`);
 const siteHeaderCostElement = siteHeaderTripElement.querySelector(`.trip-info`);
 
 render(siteHeaderCostElement, tripCost(), `beforeend`);
-render(siteHeaderMenuElement, tripControl(), `afterend`);
-render(siteHeaderFiltersElement, tripFilter(), `afterend`);
-render(siteMainEventElement, tripSort(), `beforeend`);
-render(siteMainEventElement, tripDay(), `beforeend`);
+render(siteHeaderMenuElement, pageNavigation(), `afterend`);
+render(siteHeaderFiltersElement, tripFilter(MAIN_FILTERS), `afterend`);
+render(siteTripEventsElement, tripSort(SORT_FILTERS), `beforeend`);
+render(siteTripEventsElement, tripDay(), `beforeend`);
 
-const siteTripItemElement = siteMainEventElement.querySelector(`.trip-events__list`);
-
-render(siteTripItemElement, tripEdittor(), `afterbegin`);
+const siteTripItemElement = siteTripEventsElement.querySelector(`.trip-events__list`);
 
 for (let i = 0; i < TASK_COUNT; i++) {
-  render(siteTripItemElement, tripItem(), `beforeend`);
+  console.log(tripItems)
+  render(siteTripItemElement, tripItem(tripItems[i]), `beforeend`);
+;
 }
+
+render(siteHeaderMenuElement, tripEdittor(), `afterbegin`);
