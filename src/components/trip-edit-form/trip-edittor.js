@@ -1,8 +1,9 @@
 import {EVENT_TYPES, DESTINATIONS} from "../trip-events/trip-event-data.js";
 import {getOffers} from "./get-offers.js";
 import {eventTypeList} from "./event-types-list.js";
+import {parseDate} from "../../utils.js";
 
-const getOptions = (destination) => {
+const renderOptions = (destination) => {
   return destination.map((city) => {
   return (`<option value="${city}"></option>`);
   })
@@ -17,10 +18,10 @@ const renderPhotos = (photos) => {
 };
 
 export const tripEdittor = (tripEvent) => {
-  const {type, destination, description, offers, action, photos} = tripEvent;
+  const {type, destination, description, offers, action, photos, startDate, endDate} = tripEvent;
   const typesTransferList = eventTypeList(EVENT_TYPES.slice(0, 7));
   const typesActivitiesList = eventTypeList(EVENT_TYPES.slice(7, 10));
-  const tripOptions = getOptions(DESTINATIONS);
+  const tripOptions = renderOptions(DESTINATIONS);
   const tripOffers = getOffers(offers);
   const tripPhoto = renderPhotos(photos);
   return (
@@ -60,12 +61,12 @@ export const tripEdittor = (tripEvent) => {
                 <label class="visually-hidden" for="event-start-time-1">
                   From
                 </label>
-                <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 00:00">
+                <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${parseDate(startDate)}">
                 &mdash;
                 <label class="visually-hidden" for="event-end-time-1">
                   To
                 </label>
-                <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 00:00">
+                <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${parseDate(endDate)}">
               </div>
               <div class="event__field-group  event__field-group--price">
                 <label class="event__label" for="event-price-1">

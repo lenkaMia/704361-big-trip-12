@@ -1,6 +1,8 @@
 import {EVENT_TYPES, DESTINATIONS, OFFERS, EVENT_ACTIONS_MAP} from "./trip-event-data.js";
 import {getRandomInteger, getRandomArrayItem, getRandomArray} from "../../utils.js";
 
+const EVENTS_COUNT = 15;
+
 const descriptionText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus`;
 
 const descriptionSentences = descriptionText.split(`. `);
@@ -13,7 +15,7 @@ const getRandomDate = () => {
   );
 };
 
-const getTripEvent = () => {
+const generateTripEvent = () => {
   const type = getRandomArrayItem(EVENT_TYPES);
   const startDate = getRandomDate();
   const endDate = getRandomDate();
@@ -21,10 +23,10 @@ const getTripEvent = () => {
   return {
     type,
     destination: getRandomArrayItem(DESTINATIONS),
-    price: getRandomInteger(10, 500),
+    price: getRandomInteger(10, 200),
     action: EVENT_ACTIONS_MAP[type],
-    startEventTime: Math.min(startDate, endDate),
-    endEventTime: Math.max(startDate, endDate),
+    startDate: Math.min(startDate, endDate),
+    endDate: Math.max(startDate, endDate),
     offers: getRandomArray(aviableOffers, 0),
     aviableOffers,
     description: getRandomArray(descriptionSentences, 1, 5).join(`. `),
@@ -34,10 +36,13 @@ const getTripEvent = () => {
   };
 };
 
-const generateTripItems = (count) => {
+const generateTripEvents = (count) => {
   return new Array(count)
     .fill(``)
-    .map(getTripEvent);
+    .map((_) => generateTripEvent())
+    .sort(
+      (currentEvent, nextEvent) => currentEvent.startDate - nextEvent.startDate
+    );
 };
 
-export {getTripEvent, generateTripItems};
+export const generetedEvents = generateTripEvents(EVENTS_COUNT);

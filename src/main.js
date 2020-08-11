@@ -3,54 +3,70 @@ import {tripCost} from "./components/header/trip-cost.js";
 import {pageNavigation} from "./components/header/page-navigation.js";
 import {tripFilter} from "./components/header/trip-filter.js";
 import {tripSort} from "./components/trip-sort.js";
-import {day} from "./components/trip-events/day.js";
+import {getDayItem} from "./components/trip-events/get-day-item.js";
 import {daysContainer} from "./components/trip-events/days-container.js";
-import {tripEvent} from "./components/trip-events/trip-event.js";
-import {tripEventsContainer} from "./components/trip-events/trip-events-container.js";
+import {getTripEvent} from "./components/trip-events/get-trip-event.js";
 import {tripEdittor} from "./components/trip-edit-form/trip-edittor.js";
-import {getTripEvent, generateTripItems} from "./components/trip-events/trip.js";
+import {generetedEvents} from "./components/trip-events/generate-trip-events.js";
 import {SORT_FILTERS, MAIN_FILTERS} from "./components/trip-events/trip-event-data.js";
+import {renderElement, createElement} from "./utils";
 
-const TASK_COUNT = 4;
+const dates = [
+  ...new Set(generetedEvents.map((item) => new Date(item.startDate).toDateString()))
+];
 
 const tripMain = document.querySelector(`.trip-main`);
-const tripControlsNav = tripMain.querySelector(`.trip-controls_menu`);
-const tripControlsFilter = tripMain.querySelector(`.trip-controls_filters`);
-const tripEvents = document.querySelector(`.trip-events`);
-
-const render = (place, temlate, position) => {
-  place.insertAdjacentHTML(position, temlate);
-};
-
-render(tripMain, tripTitle(), `afterbegin`);
+renderElement(tripMain, tripTitle(), `afterbegin`);
 
 const tripInfoContainer = tripMain.querySelector(`.trip-info`);
+renderElement(tripInfoContainer, tripCost(), `beforeend`);
 
-render(tripInfoContainer, tripCost(), `beforeend`);
-render(tripControlsNav, pageNavigation(), `afterend`);
-render(tripControlsFilter, tripFilter(MAIN_FILTERS), `afterend`);
-render(tripEvents, tripSort(SORT_FILTERS), `beforeend`);
-render(tripEvents, tripEdittor(getTripEvent()), `afterbegin`);
+const tripControlsNav = tripMain.querySelector(`.trip-controls_menu`);
+renderElement(tripControlsNav, pageNavigation(), `afterend`);
+
+const tripControlsFilter = tripMain.querySelector(`.trip-controls_filters`);
+renderElement(tripControlsFilter, tripFilter(MAIN_FILTERS), `afterend`);
+
+const tripEvents = document.querySelector(`.trip-events`);
+renderElement(tripEvents, tripSort(SORT_FILTERS), `beforeend`);
+// renderElement(tripEvents, tripEdittor(getTripEvent()), `afterbegin`);
 
 // Дни
 
-render(tripEvents, daysContainer(), `beforeend`);
+renderElement(tripEvents, daysContainer(), `beforeend`);
 
 const tripDays = tripEvents.querySelector(`.trip-days`);
+// renderElement(tripDays, day(), `beforeend`);
 
-render(tripDays, day(), `beforeend`);
+// const days = document.querySelector(`.day`);
 
-const days = document.querySelector(`.day`);
+// // События
 
-// События
+// renderElement(days, tripEventsContainer(), `beforeend`);
 
-render(days, tripEventsContainer(), `beforeend`);
+dates.forEach((date, dateIndex) => {
+  const day = createElement(getDayItem(new Date(date), dateIndex + 1));
 
-const eventsContainer = tripEvents.querySelector(`.trip-events__list`);
-const tripItems = generateTripItems(TASK_COUNT);
+  generetedEvents
+    .filter((_tripEvent) => new Date(_tripEvent.startDate).toDateString() === date)
+    .forEach((_tripEvent, eventIndex) => {
+      renderElement(
+        day.querySelector(`.trip-events__list`),
+        eventIndex === 0 && dateIndex === 0 ? tripEdittor(_tripEvent) : getTripEvent(_tripEvent)
+      );
+    });
 
-for (let i = 0; i < TASK_COUNT; i++) {
-  console.log(tripItems)
-  render(eventsContainer, tripEvent(tripItems[i]), `beforeend`);
-;
-}
+  renderElement(tripDays, day.parentElement.innerHTML, `beforeend`);
+});
+
+const getFullPrice = generetedEvents.reduce((acc, item) => acc + item.price, 0);
+
+document.querySelector(`.trip-info__cost-value`).textContent = getFullPrice;
+// const eventsContainer = tripEvents.querySelector(`.trip-events__list`);
+// const tripItems = generateTripEvents(TASK_COUNT);
+
+// for (let i = 0; i < TASK_COUNT; i++) {
+//   console.log(tripItems)
+//   renderElement(eventsContainer, tripEvent(tripItems[i]), `beforeend`);
+// ;
+// }
