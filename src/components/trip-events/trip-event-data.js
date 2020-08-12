@@ -41,13 +41,13 @@ export const OFFERS = [
 ];
 
 export const SORT_FILTERS = [
-  { name: `event`, isActive: false },
-  { name: `time`, isActive: true },
-  { name: `price`, isActive: false },
+  { name: `event`, active: false },
+  { name: `time`, active: true },
+  { name: `price`, active: false },
 ];
 
 export const MAIN_FILTERS = [
-  { name: `everything`, isActive: true },
-  { name: `future`, isActive: false },
-  { name: `past`, isActive: false },
+  { name: `everything`, active: true },
+  { name: `future`, active: false },
+  { name: `past`, active: false },
 ];

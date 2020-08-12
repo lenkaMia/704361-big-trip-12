@@ -6,7 +6,7 @@ import {tripSort} from "./components/trip-sort.js";
 import {getDayItem} from "./components/trip-events/get-day-item.js";
 import {daysContainer} from "./components/trip-events/days-container.js";
 import {getTripEvent} from "./components/trip-events/get-trip-event.js";
-import {tripEdittor} from "./components/trip-edit-form/trip-edittor.js";
+import {tripEdittor} from "./components/trip-edittor.js";
 import {generetedEvents} from "./components/trip-events/generate-trip-events.js";
 import {SORT_FILTERS, MAIN_FILTERS} from "./components/trip-events/trip-event-data.js";
 import {renderElement, createElement} from "./utils";

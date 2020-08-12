@@ -1,5 +1,19 @@
-import {createEventOffer} from "./create-event-offer.js";
 import {parseTime} from "../../utils.js";
+
+const createEventOffer = (offers) => {
+    return offers.map((offer) => {
+        const {title, price} = offer;
+
+        return (
+            `<li class="event__offer">
+        <span class="event__offer-title">${title}</span>
+        &plus;
+        &euro;&nbsp;<span class="event__offer-price">${price}</span>
+      </li>`
+        );
+    })
+        .join(`\n`);
+};
 
 export const getTripEvent = (item) => {
     const {type, destination, price, offers, action, startDate, endDate} = item;
@@ -9,7 +23,7 @@ export const getTripEvent = (item) => {
     `<li class="trip-events__item">
             <div class="event">
                 <div class="event__type">
-                    <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event ${type} icon">
+                    <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event ${type.toLowerCase()} icon">
                 </div>
                 <h3 class="event__title">${type} ${action} ${destination}</h3>
 

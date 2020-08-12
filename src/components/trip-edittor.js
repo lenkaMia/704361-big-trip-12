@@ -1,7 +1,5 @@
-import {EVENT_TYPES, DESTINATIONS} from "../trip-events/trip-event-data.js";
-import {getOffers} from "./get-offers.js";
-import {eventTypeList} from "./event-types-list.js";
-import {parseDate} from "../../utils.js";
+import {EVENT_TYPES, DESTINATIONS} from "./trip-events/trip-event-data.js";
+import {parseDate} from "../utils.js";
 
 const renderOptions = (destination) => {
   return destination.map((city) => {
@@ -17,6 +15,51 @@ const renderPhotos = (photos) => {
     .join(`\n`);
 };
 
+const eventTypeList = (types) => {
+  return types.map((type) => {
+    return (
+      `<div class="event__type-item">
+        <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
+        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type}-1">${type}</label>
+      </div>`
+    );
+  })
+    .join(`\n`);
+};
+
+const eventOffer = (offers) => {
+  return offers.map((offer) => {
+    const {type, title, price} = offer;
+    const isChecked = Math.random() > 0.5;
+
+    return (
+      `<div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-1" type="checkbox" name="event-offer-${type}"
+        ${isChecked ? `checked` : ``}
+        >
+        <label class="event__offer-label" for="event-offer-${type}-1">
+          <span class="event__offer-title">${title}</span>
+          &plus;
+          &euro;&nbsp;<span class="event__offer-price">${price}</span>
+        </label>
+      </div>`
+    );
+  })
+    .join(``);
+};
+
+const getOffers = (offers) => {
+  const eventOffers = eventOffer(offers);
+  return (
+    `<section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__available-offers">
+        ${eventOffers}
+      </div>
+    </section>`
+  );
+};
+
 export const tripEdittor = (tripEvent) => {
   const {type, destination, description, offers, action, photos, startDate, endDate} = tripEvent;
   const typesTransferList = eventTypeList(EVENT_TYPES.slice(0, 7));
@@ -30,7 +73,7 @@ export const tripEdittor = (tripEvent) => {
               <div class="event__type-wrapper">
                 <label class="event__type  event__type-btn" for="event-type-toggle-1">
                   <span class="visually-hidden">Choose event type</span>
-                  <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+                  <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event ${type.toLowerCase()} icon">
                 </label>
                 <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
                 <div class="event__type-list">
