@@ -18,7 +18,6 @@ const createEventOffer = (offers) => {
 export const getTripEvent = (item) => {
     const {type, destination, price, offers, action, startDate, endDate} = item;
     const eventOffers = createEventOffer(offers);
-    console.log(type);
     return (
     `<li class="trip-events__item">
             <div class="event">

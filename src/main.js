@@ -16,7 +16,7 @@ const dates = [
 ];
 
 const tripMain = document.querySelector(`.trip-main`);
-renderElement(tripMain, tripTitle(), `afterbegin`);
+renderElement(tripMain, tripTitle(generetedEvents), `afterbegin`);
 
 const tripInfoContainer = tripMain.querySelector(`.trip-info`);
 renderElement(tripInfoContainer, tripCost());

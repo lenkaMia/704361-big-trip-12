@@ -37,3 +37,14 @@ export const parseDate = (UTCTimestamp) => {
     date.getFullYear()
   ).slice(2)}`;
 };
+
+export const getTripDuration = (start, end) => {
+  const startDate = new Date(start);
+  const startDay = startDate.getDate();
+  const endDay = new Date(end).getDate();
+  const month = startDate.toLocaleString(`en-US`, {
+    month: `short`
+  });
+
+  return `${month} ${startDay}&nbsp;&mdash;&nbsp;${endDay}`;
+};
