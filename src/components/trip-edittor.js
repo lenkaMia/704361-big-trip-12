@@ -3,7 +3,7 @@ import {parseDate} from "../utils.js";
 
 const renderOptions = (destination) => {
   return destination.map((city) => {
-  return (`<option value="${city}"></option>`);
+    return (`<option value="${city}"></option>`);
   })
   .join(`\n`);
 };
