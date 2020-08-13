@@ -1,4 +1,4 @@
-import {EVENT_TYPES, DESTINATIONS} from "./trip-events/trip-event-data.js";
+import {EVENT_TYPES, DESTINATIONS} from "../consts.js";
 import {parseDate} from "../utils.js";
 
 const renderOptions = (destination) => {

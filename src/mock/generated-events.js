@@ -1,5 +1,5 @@
-import {EVENT_TYPES, DESTINATIONS, OFFERS, EVENT_ACTIONS_MAP} from "./trip-event-data.js";
-import {getRandomInteger, getRandomArrayItem, getRandomArray} from "../../utils.js";
+import {EVENT_TYPES, DESTINATIONS, OFFERS, EVENT_ACTIONS_MAP} from "../consts.js";
+import {getRandomInteger, getRandomArrayItem, getRandomArray} from "../utils.js";
 
 const EVENTS_COUNT = 15;
 
@@ -41,7 +41,7 @@ const generateTripEvents = (count) => {
     .fill(``)
     .map((_) => generateTripEvent())
     .sort(
-      (currentEvent, nextEvent) => currentEvent.startDate - nextEvent.startDate
+        (currentEvent, nextEvent) => currentEvent.startDate - nextEvent.startDate
     );
 };
 

@@ -3,12 +3,14 @@ import {tripCost} from "./components/header/trip-cost.js";
 import {pageNavigation} from "./components/header/page-navigation.js";
 import {tripFilter} from "./components/header/trip-filter.js";
 import {tripSort} from "./components/trip-sort.js";
-import {getDayItem} from "./components/trip-events/get-day-item.js";
-import {daysContainer} from "./components/trip-events/days-container.js";
-import {getTripEvent} from "./components/trip-events/get-trip-event.js";
+import {getDayItem} from "./components/day-item.js";
+import {daysContainer} from "./components/days-container.js";
+import {getTripEvent} from "./components/trip-event.js";
 import {tripEdittor} from "./components/trip-edittor.js";
-import {generetedEvents} from "./components/trip-events/generate-trip-events.js";
-import {SORT_FILTERS, MAIN_FILTERS} from "./components/trip-events/trip-event-data.js";
+import {generetedEvents} from "./mock/generated-events.js";
+import {MAIN_FILTERS} from "./mock/main-filters.js";
+import {SORT_FILTERS} from "./mock/sort-filters.js";
+import {NAV_ITEMS} from "./mock/nav-items.js";
 import {renderElement, createElement} from "./utils";
 
 const dates = [
@@ -22,7 +24,7 @@ const tripInfoContainer = tripMain.querySelector(`.trip-info`);
 renderElement(tripInfoContainer, tripCost());
 
 const tripControlsNav = tripMain.querySelector(`.trip-controls_menu`);
-renderElement(tripControlsNav, pageNavigation(), `afterend`);
+renderElement(tripControlsNav, pageNavigation(NAV_ITEMS), `afterend`);
 
 const tripControlsFilter = tripMain.querySelector(`.trip-controls_filters`);
 renderElement(tripControlsFilter, tripFilter(MAIN_FILTERS), `afterend`);

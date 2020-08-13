@@ -5,8 +5,8 @@ export const getDayItem = (date, day) => {
         <span class="day__counter">${day}</span>
         <time class="day__date" datetime="${date}">
         ${new Date(date).toLocaleString(`en-US`, {
-          month: `short`
-        })}
+      month: `short`
+    })}
         ${new Date(date).getDate()}
         </time>
       </div>

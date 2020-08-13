@@ -39,15 +39,3 @@ export const OFFERS = [
     price: 35
   }
 ];
-
-export const SORT_FILTERS = [
-  { name: `event`, active: false },
-  { name: `time`, active: true },
-  { name: `price`, active: false },
-];
-
-export const MAIN_FILTERS = [
-  { name: `everything`, active: true },
-  { name: `future`, active: false },
-  { name: `past`, active: false },
-];
