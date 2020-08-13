@@ -1,37 +1,56 @@
-import {tripTitle} from "./view/trip-title.js";
-import {tripCost} from "./view/trip-cost.js";
-import {tripControl} from "./view/trip-control.js";
-import {tripFilter} from "./view/trip-filter.js";
-import {tripSort} from "./view/trip-sort.js";
-import {tripDay} from "./view/trip-day.js";
-import {tripItem} from "./view/trip-item.js";
-import {tripEdittor} from "./view/trip-edittor.js"
+import {tripTitle} from "./components/header/trip-title.js";
+import {tripCost} from "./components/header/trip-cost.js";
+import {pageNavigation} from "./components/header/page-navigation.js";
+import {tripFilter} from "./components/header/trip-filter.js";
+import {tripSort} from "./components/trip-sort.js";
+import {getDayItem} from "./components/day-item.js";
+import {daysContainer} from "./components/days-container.js";
+import {getTripEvent} from "./components/trip-event.js";
+import {tripEdittor} from "./components/trip-edittor.js";
+import {generetedEvents} from "./mock/generated-events.js";
+import {MAIN_FILTERS} from "./mock/main-filters.js";
+import {SORT_FILTERS} from "./mock/sort-filters.js";
+import {NAV_ITEMS} from "./mock/nav-items.js";
+import {renderElement, createElement} from "./utils";
 
-const TASK_COUNT = 3;
+const dates = [
+  ...new Set(generetedEvents.map((item) => new Date(item.startDate).toDateString()))
+];
 
-const siteHeaderTripElement = document.querySelector(`.trip-main`);
-const siteHeaderMenuElement = siteHeaderTripElement.querySelector(`.trip-controls_menu`);
-const siteHeaderFiltersElement = siteHeaderTripElement.querySelector(`.trip-controls_filters`);
-const siteMainEventElement = document.querySelector(`.trip-events`);
+const tripMain = document.querySelector(`.trip-main`);
+renderElement(tripMain, tripTitle(generetedEvents), `afterbegin`);
 
-const render = (place, temlate, position) => {
-  place.insertAdjacentHTML(position, temlate);
-};
+const tripInfoContainer = tripMain.querySelector(`.trip-info`);
+renderElement(tripInfoContainer, tripCost());
 
-render(siteHeaderTripElement, tripTitle(), `afterbegin`);
+const tripControlsNav = tripMain.querySelector(`.trip-controls_menu`);
+renderElement(tripControlsNav, pageNavigation(NAV_ITEMS), `afterend`);
 
-const siteHeaderCostElement = siteHeaderTripElement.querySelector(`.trip-info`);
+const tripControlsFilter = tripMain.querySelector(`.trip-controls_filters`);
+renderElement(tripControlsFilter, tripFilter(MAIN_FILTERS), `afterend`);
 
-render(siteHeaderCostElement, tripCost(), `beforeend`);
-render(siteHeaderMenuElement, tripControl(), `afterend`);
-render(siteHeaderFiltersElement, tripFilter(), `afterend`);
-render(siteMainEventElement, tripSort(), `beforeend`);
-render(siteMainEventElement, tripDay(), `beforeend`);
+const tripEvents = document.querySelector(`.trip-events`);
+renderElement(tripEvents, tripSort(SORT_FILTERS));
 
-const siteTripItemElement = siteMainEventElement.querySelector(`.trip-events__list`);
+renderElement(tripEvents, daysContainer());
 
-render(siteTripItemElement, tripEdittor(), `afterbegin`);
+const tripDays = tripEvents.querySelector(`.trip-days`);
 
-for (let i = 0; i < TASK_COUNT; i++) {
-  render(siteTripItemElement, tripItem(), `beforeend`);
-}
+dates.forEach((date, dateIndex) => {
+  const day = createElement(getDayItem(new Date(date), dateIndex + 1));
+
+  generetedEvents
+    .filter((_tripEvent) => new Date(_tripEvent.startDate).toDateString() === date)
+    .forEach((_tripEvent, eventIndex) => {
+      renderElement(
+        day.querySelector(`.trip-events__list`),
+        eventIndex === 0 && dateIndex === 0 ? tripEdittor(_tripEvent) : getTripEvent(_tripEvent)
+      );
+    });
+
+  renderElement(tripDays, day.parentElement.innerHTML);
+});
+
+const getFullPrice = generetedEvents.reduce((acc, item) => acc + item.price, 0);
+
+document.querySelector(`.trip-info__cost-value`).textContent = getFullPrice;
