@@ -29,16 +29,15 @@ renderElement(
   new TripCost().getElement(),
   RenderPosition.BEFOREEND);
 
-const tripControlsNav = tripMain.querySelector(`.trip-controls_menu`);
+const tripControls = tripMain.querySelector(`.trip-controls`);
 renderElement(
-  tripControlsNav, 
+  tripControls, 
   new Navigation(NAV_ITEMS).getElement(), 
   RenderPosition.BEFOREEND);
 
-const tripControlsFilter = tripMain.querySelector(`.trip-controls_filters`);
 renderElement(
-  tripControlsFilter, 
-  new Filters(MAIN_FILTERS), 
+  tripControls, 
+  new Filters(MAIN_FILTERS).getElement(), 
   RenderPosition.BEFOREEND);
 
 const tripEvents = document.querySelector(`.trip-events`);
