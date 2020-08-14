@@ -15,8 +15,20 @@ export const getRandomArray = (array, start, end = array.length) => {
     .map(() => getRandomArrayItem(array));
 };
 
-export const renderElement = (place, temlate, position = `beforeend`) => {
-  place.insertAdjacentHTML(position, temlate);
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+
+export const renderElement = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
 };
 
 export const createElement = (template) => {
