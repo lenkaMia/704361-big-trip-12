@@ -4,7 +4,7 @@ const daysContainer = () => {
   return `<ul class="trip-days"></ul>`;
 };
 
-export default class daysContainer {
+export default class DaysContainer {
   constructor() {
     this._element = null;
   }

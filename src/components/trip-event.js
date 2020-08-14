@@ -1,4 +1,4 @@
-import {createElement , parseTime} from "../utils.js";
+import {createElement, parseTime} from "../utils.js";
 
 const createEventOffer = (offers) => {
   return offers.map((offer) => {
@@ -16,7 +16,7 @@ const createEventOffer = (offers) => {
 };
 
 const getTripEvent = (tripEvent) => {
-  const { type, destination, price, offers, action, startDate, endDate } = tripEvent;
+  const {type, destination, price, offers, action, startDate, endDate} = tripEvent;
   const eventOffers = createEventOffer(offers);
   return (
     `<li class="trip-events__item">
