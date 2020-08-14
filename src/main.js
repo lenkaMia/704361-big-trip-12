@@ -66,6 +66,23 @@ dates.forEach((date, dateIndex) => {
       const tripEventComponent = new TripEvent(_tripEvent).getElement();
       const tripEdittorComponent = new TripEdittor(_tripEvent).getElement();
 
+      const replaceTripToTripEdit = () => {
+        eventsList.replaceChild(tripEdittorComponent, tripEventComponent)
+      };
+        
+      const replaceTripEditToTrip = () => {
+        eventsList.replaceChild(tripEventComponent, tripEdittorComponent)
+      };
+
+      const onEscKeyDown = (evt) => {
+        const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+        if (isEscKey) {
+          replaceTripEditToTrip();
+          document.removeEventListener(`keydown`, onEscKeyDown);
+        }
+      };
+
       renderElement(
         eventsList,
         tripEventComponent,
@@ -75,7 +92,8 @@ dates.forEach((date, dateIndex) => {
       tripEventComponent
         .querySelector(`.event__rollup-btn`)
         .addEventListener(`click`, () => {
-          eventsList.replaceChild(tripEdittorComponent, tripEventComponent)
+          replaceTripToTripEdit();
+          document.addEventListener(`keydown`, onEscKeyDown);
         });
 
         tripEdittorComponent,addEventListener(`submit`, (evt) => {
