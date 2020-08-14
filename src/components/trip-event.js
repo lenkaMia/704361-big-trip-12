@@ -1,4 +1,4 @@
-import {parseTime} from "../utils.js";
+import {createElement , parseTime} from "../utils.js";
 
 const createEventOffer = (offers) => {
   return offers.map((offer) => {
@@ -15,8 +15,8 @@ const createEventOffer = (offers) => {
         .join(`\n`);
 };
 
-export const getTripEvent = (item) => {
-  const {type, destination, price, offers, action, startDate, endDate} = item;
+const getTripEvent = (tripEvent) => {
+  const { type, destination, price, offers, action, startDate, endDate } = tripEvent;
   const eventOffers = createEventOffer(offers);
   return (
     `<li class="trip-events__item">
@@ -55,3 +55,26 @@ export const getTripEvent = (item) => {
         </li>`
   );
 };
+
+export default class TripEvent {
+  constructor(tripEvent) {
+    this._tripEvent = tripEvent;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return getTripEvent(this._tripEvent);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

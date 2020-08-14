@@ -6,7 +6,7 @@ import {tripSort} from "./components/trip-sort.js";
 import {getDayItem} from "./components/day-item.js";
 import {daysContainer} from "./components/days-container.js";
 import {getTripEvent} from "./components/trip-event.js";
-import {tripEdittor} from "./components/trip-edittor.js";
+import tripEdittorComponent from "./components/trip-edittor.js";
 import {generetedEvents} from "./mock/generated-events.js";
 import {MAIN_FILTERS} from "./mock/main-filters.js";
 import {SORT_FILTERS} from "./mock/sort-filters.js";
@@ -44,7 +44,7 @@ dates.forEach((date, dateIndex) => {
     .forEach((_tripEvent, eventIndex) => {
       renderElement(
         day.querySelector(`.trip-events__list`),
-        eventIndex === 0 && dateIndex === 0 ? tripEdittor(_tripEvent) : getTripEvent(_tripEvent)
+        eventIndex === 0 && dateIndex === 0 ? new tripEdittorComponent(_tripEvent).getElement() : getTripEvent(_tripEvent)
       );
     });
 

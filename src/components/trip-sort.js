@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const createSortMark = (sorting) => {
   return (
     `<div class="trip-sort__item  trip-sort__item--${sorting.name}">
@@ -14,7 +16,7 @@ const createSortMark = (sorting) => {
 };
 
 
-export const tripSort = (sortings) => {
+const tripSort = (sortings) => {
   const sortingsMarks = sortings.map((sorting) => createSortMark(sorting)).join(`\n`);
   return (
     `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -25,3 +27,26 @@ export const tripSort = (sortings) => {
           </form>`
   );
 };
+
+export default class Sorting {
+  constructor(sortings) {
+    this._sortings = sortings;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return tripSort(this._sortings);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

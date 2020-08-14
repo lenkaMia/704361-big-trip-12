@@ -1,6 +1,6 @@
-import {getTripDuration} from "../../utils.js"
+import {createElement, getTripDuration} from "../../utils.js"
 
-export const tripTitle = (events) => {
+const tripTitle = (events) => {
   return (
     `<section class="trip-main__trip-info  trip-info">
         <div class="trip-info__main">
@@ -16,3 +16,26 @@ export const tripTitle = (events) => {
     </section>`
   );
 };
+
+export default class tripTitle {
+  constructor(events) {
+    this._events = events;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return tripTitle(this._events);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
