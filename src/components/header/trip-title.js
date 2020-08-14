@@ -17,7 +17,7 @@ const tripTitle = (events) => {
   );
 };
 
-export default class tripTitle {
+export default class TripTitle {
   constructor(events) {
     this._events = events;
     this._element = null;

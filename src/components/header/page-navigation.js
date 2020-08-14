@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import {createElement} from "../../utils.js";
 
 const pageNavigation = (navItems) => {
   return (
@@ -20,7 +20,7 @@ export default class Navigation {
   }
 
   getTemplate() {
-    return getMenuTemplate(this._navItems);
+    return pageNavigation(this._navItems);
   }
 
   getElement() {
