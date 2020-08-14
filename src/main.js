@@ -96,7 +96,7 @@ dates.forEach((date, dateIndex) => {
           document.addEventListener(`keydown`, onEscKeyDown);
         });
 
-        tripEdittorComponent,addEventListener(`submit`, (evt) => {
+        tripEdittorComponent.addEventListener(`submit`, (evt) => {
           evt.preventDefault();
           eventsList.replaceChild(tripEventComponent, tripEdittorComponent)
         });
