@@ -1,56 +1,120 @@
-import {tripTitle} from "./components/header/trip-title.js";
-import {tripCost} from "./components/header/trip-cost.js";
-import {pageNavigation} from "./components/header/page-navigation.js";
-import {tripFilter} from "./components/header/trip-filter.js";
-import {tripSort} from "./components/trip-sort.js";
-import {getDayItem} from "./components/day-item.js";
-import {daysContainer} from "./components/days-container.js";
-import {getTripEvent} from "./components/trip-event.js";
-import {tripEdittor} from "./components/trip-edittor.js";
+import TripTitle from "./components/header/trip-title.js";
+import TripCost from "./components/header/trip-cost.js";
+import Navigation from "./components/header/page-navigation.js";
+import Filters from "./components/header/trip-filter.js";
+import Sorting from "./components/trip-sort.js";
+import DayItem from "./components/day-item.js";
+import DaysContainer from "./components/days-container.js";
+import TripEvent from "./components/trip-event.js";
+import TripEdittor from "./components/trip-edittor.js";
 import {generetedEvents} from "./mock/generated-events.js";
 import {MAIN_FILTERS} from "./mock/main-filters.js";
 import {SORT_FILTERS} from "./mock/sort-filters.js";
 import {NAV_ITEMS} from "./mock/nav-items.js";
-import {renderElement, createElement} from "./utils";
-
-const dates = [
-  ...new Set(generetedEvents.map((item) => new Date(item.startDate).toDateString()))
-];
+import {renderElement, RenderPosition} from "./utils";
+import NoEventText from "./components/no-event-text.js";
 
 const tripMain = document.querySelector(`.trip-main`);
-renderElement(tripMain, tripTitle(generetedEvents), `afterbegin`);
+renderElement(
+  tripMain, 
+  new TripTitle(generetedEvents).getElement(),
+  RenderPosition.AFTERBEGIN);
 
 const tripInfoContainer = tripMain.querySelector(`.trip-info`);
-renderElement(tripInfoContainer, tripCost());
+renderElement(
+  tripInfoContainer, 
+  new TripCost().getElement(),
+  RenderPosition.BEFOREEND);
 
-const tripControlsNav = tripMain.querySelector(`.trip-controls_menu`);
-renderElement(tripControlsNav, pageNavigation(NAV_ITEMS), `afterend`);
+const tripControls = tripMain.querySelector(`.trip-controls`);
+renderElement(
+  tripControls, 
+  new Navigation(NAV_ITEMS).getElement(), 
+  RenderPosition.BEFOREEND);
 
-const tripControlsFilter = tripMain.querySelector(`.trip-controls_filters`);
-renderElement(tripControlsFilter, tripFilter(MAIN_FILTERS), `afterend`);
+renderElement(
+  tripControls, 
+  new Filters(MAIN_FILTERS).getElement(), 
+  RenderPosition.BEFOREEND);
 
 const tripEvents = document.querySelector(`.trip-events`);
-renderElement(tripEvents, tripSort(SORT_FILTERS));
 
-renderElement(tripEvents, daysContainer());
+if (generetedEvents.length === 0) {
+  renderElement(
+    tripEvents,
+    new NoEventText().getElement(),
+    RenderPosition.BEFOREEND
+  );
+} else {
+  renderElement(
+    tripEvents,
+    new Sorting(SORT_FILTERS).getElement(),
+    RenderPosition.BEFOREEND);
 
-const tripDays = tripEvents.querySelector(`.trip-days`);
+  renderElement(
+    tripEvents,
+    new DaysContainer().getElement(),
+    RenderPosition.BEFOREEND);
 
-dates.forEach((date, dateIndex) => {
-  const day = createElement(getDayItem(new Date(date), dateIndex + 1));
+  const tripDays = tripEvents.querySelector(`.trip-days`);
 
-  generetedEvents
-    .filter((_tripEvent) => new Date(_tripEvent.startDate).toDateString() === date)
-    .forEach((_tripEvent, eventIndex) => {
-      renderElement(
-        day.querySelector(`.trip-events__list`),
-        eventIndex === 0 && dateIndex === 0 ? tripEdittor(_tripEvent) : getTripEvent(_tripEvent)
-      );
-    });
+  const dates = [
+    ...new Set(generetedEvents.map((item) => new Date(item.startDate).toDateString()))
+  ];
 
-  renderElement(tripDays, day.parentElement.innerHTML);
-});
+  dates.forEach((date, dateIndex) => {
+    const day = new DayItem(
+      new Date(date),
+      dateIndex + 1
+    ).getElement();
 
-const getFullPrice = generetedEvents.reduce((acc, item) => acc + item.price, 0);
+    generetedEvents
+      .filter((_tripEvent) => new Date(_tripEvent.startDate).toDateString() === date)
+      .forEach((_tripEvent, eventIndex) => {
+        const eventsList = day.querySelector(`.trip-events__list`);
+        const tripEventComponent = new TripEvent(_tripEvent).getElement();
+        const tripEdittorComponent = new TripEdittor(_tripEvent).getElement();
 
-document.querySelector(`.trip-info__cost-value`).textContent = getFullPrice;
+        const replaceTripToTripEdit = () => {
+          eventsList.replaceChild(tripEdittorComponent, tripEventComponent)
+        };
+
+        const replaceTripEditToTrip = () => {
+          eventsList.replaceChild(tripEventComponent, tripEdittorComponent)
+        };
+
+        const onEscKeyDown = (evt) => {
+          const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+          if (isEscKey) {
+            replaceTripEditToTrip();
+            document.removeEventListener(`keydown`, onEscKeyDown);
+          }
+        };
+
+        renderElement(
+          eventsList,
+          tripEventComponent,
+          RenderPosition.BEFOREEND
+        );
+
+        tripEventComponent
+          .querySelector(`.event__rollup-btn`)
+          .addEventListener(`click`, () => {
+            replaceTripToTripEdit();
+            document.addEventListener(`keydown`, onEscKeyDown);
+          });
+
+        tripEdittorComponent.addEventListener(`submit`, (evt) => {
+          evt.preventDefault();
+          eventsList.replaceChild(tripEventComponent, tripEdittorComponent)
+        });
+      });
+
+    renderElement(tripDays, day, RenderPosition.BEFOREEND);
+  });
+
+  const getFullPrice = generetedEvents.reduce((acc, item) => acc + item.price, 0);
+
+  document.querySelector(`.trip-info__cost-value`).textContent = getFullPrice;
+}

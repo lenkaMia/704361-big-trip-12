@@ -1,16 +1,12 @@
 import {createElement} from "../utils.js";
 
-const daysContainer = () => {
-  return `<ul class="trip-days"></ul>`;
-};
-
-export default class DaysContainer {
+export default class NoEventText {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return daysContainer();
+    return `<p class="trip-events__msg">Click New Event to create your first point</p>`;
   }
 
   getElement() {

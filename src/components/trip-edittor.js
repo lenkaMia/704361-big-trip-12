@@ -1,5 +1,5 @@
 import {EVENT_TYPES, DESTINATIONS} from "../consts.js";
-import {parseDate} from "../utils.js";
+import {createElement, parseDate} from "../utils.js";
 
 const renderOptions = (destination) => {
   return destination.map((city) => {
@@ -60,7 +60,7 @@ const getOffers = (offers) => {
   );
 };
 
-export const tripEdittor = (tripEvent) => {
+const tripEdittor = (tripEvent) => {
   const {type, destination, description, offers, action, photos, startDate, endDate} = tripEvent;
   const typesTransferList = eventTypeList(EVENT_TYPES.slice(0, 7));
   const typesActivitiesList = eventTypeList(EVENT_TYPES.slice(7, 10));
@@ -146,3 +146,26 @@ export const tripEdittor = (tripEvent) => {
           </form>`
   );
 };
+
+export default class TripEdittor {
+  constructor(tripEvent) {
+    this._tripEvent = tripEvent;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return tripEdittor(this._tripEvent);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
