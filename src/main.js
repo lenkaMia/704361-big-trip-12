@@ -12,10 +12,7 @@ import {MAIN_FILTERS} from "./mock/main-filters.js";
 import {SORT_FILTERS} from "./mock/sort-filters.js";
 import {NAV_ITEMS} from "./mock/nav-items.js";
 import {renderElement, RenderPosition} from "./utils";
-
-const dates = [
-  ...new Set(generetedEvents.map((item) => new Date(item.startDate).toDateString()))
-];
+import NoEventText from "./components/no-event-text.js";
 
 const tripMain = document.querySelector(`.trip-main`);
 renderElement(
@@ -41,70 +38,83 @@ renderElement(
   RenderPosition.BEFOREEND);
 
 const tripEvents = document.querySelector(`.trip-events`);
-renderElement(
-  tripEvents, 
-  new Sorting(SORT_FILTERS).getElement(),
-  RenderPosition.BEFOREEND);
 
-renderElement(
-  tripEvents, 
-  new DaysContainer().getElement(),
-  RenderPosition.BEFOREEND);
+if (generetedEvents.length === 0) {
+  renderElement(
+    tripEvents,
+    new NoEventText().getElement(),
+    RenderPosition.BEFOREEND
+  );
+} else {
+  renderElement(
+    tripEvents,
+    new Sorting(SORT_FILTERS).getElement(),
+    RenderPosition.BEFOREEND);
 
-const tripDays = tripEvents.querySelector(`.trip-days`);
+  renderElement(
+    tripEvents,
+    new DaysContainer().getElement(),
+    RenderPosition.BEFOREEND);
 
-dates.forEach((date, dateIndex) => {
-  const day = new DayItem(
-    new Date(date),
-    dateIndex + 1
-  ).getElement();
+  const tripDays = tripEvents.querySelector(`.trip-days`);
 
-  generetedEvents
-    .filter((_tripEvent) => new Date(_tripEvent.startDate).toDateString() === date)
-    .forEach((_tripEvent, eventIndex) => {
-      const eventsList = day.querySelector(`.trip-events__list`);
-      const tripEventComponent = new TripEvent(_tripEvent).getElement();
-      const tripEdittorComponent = new TripEdittor(_tripEvent).getElement();
+  const dates = [
+    ...new Set(generetedEvents.map((item) => new Date(item.startDate).toDateString()))
+  ];
 
-      const replaceTripToTripEdit = () => {
-        eventsList.replaceChild(tripEdittorComponent, tripEventComponent)
-      };
-        
-      const replaceTripEditToTrip = () => {
-        eventsList.replaceChild(tripEventComponent, tripEdittorComponent)
-      };
+  dates.forEach((date, dateIndex) => {
+    const day = new DayItem(
+      new Date(date),
+      dateIndex + 1
+    ).getElement();
 
-      const onEscKeyDown = (evt) => {
-        const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+    generetedEvents
+      .filter((_tripEvent) => new Date(_tripEvent.startDate).toDateString() === date)
+      .forEach((_tripEvent, eventIndex) => {
+        const eventsList = day.querySelector(`.trip-events__list`);
+        const tripEventComponent = new TripEvent(_tripEvent).getElement();
+        const tripEdittorComponent = new TripEdittor(_tripEvent).getElement();
 
-        if (isEscKey) {
-          replaceTripEditToTrip();
-          document.removeEventListener(`keydown`, onEscKeyDown);
-        }
-      };
+        const replaceTripToTripEdit = () => {
+          eventsList.replaceChild(tripEdittorComponent, tripEventComponent)
+        };
 
-      renderElement(
-        eventsList,
-        tripEventComponent,
-        RenderPosition.BEFOREEND
-      );
+        const replaceTripEditToTrip = () => {
+          eventsList.replaceChild(tripEventComponent, tripEdittorComponent)
+        };
 
-      tripEventComponent
-        .querySelector(`.event__rollup-btn`)
-        .addEventListener(`click`, () => {
-          replaceTripToTripEdit();
-          document.addEventListener(`keydown`, onEscKeyDown);
-        });
+        const onEscKeyDown = (evt) => {
+          const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+          if (isEscKey) {
+            replaceTripEditToTrip();
+            document.removeEventListener(`keydown`, onEscKeyDown);
+          }
+        };
+
+        renderElement(
+          eventsList,
+          tripEventComponent,
+          RenderPosition.BEFOREEND
+        );
+
+        tripEventComponent
+          .querySelector(`.event__rollup-btn`)
+          .addEventListener(`click`, () => {
+            replaceTripToTripEdit();
+            document.addEventListener(`keydown`, onEscKeyDown);
+          });
 
         tripEdittorComponent.addEventListener(`submit`, (evt) => {
           evt.preventDefault();
           eventsList.replaceChild(tripEventComponent, tripEdittorComponent)
         });
-    });
+      });
 
-  renderElement(tripDays, day, RenderPosition.BEFOREEND);
-});
+    renderElement(tripDays, day, RenderPosition.BEFOREEND);
+  });
 
-const getFullPrice = generetedEvents.reduce((acc, item) => acc + item.price, 0);
+  const getFullPrice = generetedEvents.reduce((acc, item) => acc + item.price, 0);
 
-document.querySelector(`.trip-info__cost-value`).textContent = getFullPrice;
+  document.querySelector(`.trip-info__cost-value`).textContent = getFullPrice;
+}
