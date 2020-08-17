@@ -7,7 +7,7 @@ import Trip from "./presenter/trip.js"
 import {generetedEvents} from "./mock/generated-events.js";
 import {MAIN_FILTERS} from "./mock/main-filters.js";
 import {NAV_ITEMS} from "./mock/nav-items.js";
-import {renderElement, RenderPosition, replace} from "./utils/render.js";
+import {renderElement, RenderPosition} from "./utils/render.js";
 
 
 const tripMain = document.querySelector(`.trip-main`);
