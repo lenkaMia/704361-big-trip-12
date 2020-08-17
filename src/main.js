@@ -93,7 +93,7 @@ if (generetedEvents.length === 0) {
           document.addEventListener(`keydown`, onEscKeyDown);
         });
 
-        tripEdittorComponent.getElement().addEventListener(`submit`, (evt) => {
+        tripEdittorComponent.setSubmitHandler((evt) => {
           evt.preventDefault();
           replace(tripEventComponent, tripEdittorComponent);
         });

@@ -157,4 +157,8 @@ export default class TripEdittor extends AbstractComponent {
   getTemplate() {
     return tripEdittor(this._tripEvent);
   }
+
+  setSubmitHandler(handler) {
+    this.getElement().addEventListener(`submit`, handler);
+  }
 }
