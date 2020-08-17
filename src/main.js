@@ -11,7 +11,7 @@ import {generetedEvents} from "./mock/generated-events.js";
 import {MAIN_FILTERS} from "./mock/main-filters.js";
 import {SORT_FILTERS} from "./mock/sort-filters.js";
 import {NAV_ITEMS} from "./mock/nav-items.js";
-import {renderElement, RenderPosition} from "./utils/render.js";
+import {renderElement, RenderPosition, replace} from "./utils/render.js";
 import NoEventText from "./components/no-event-text.js";
 
 const tripMain = document.querySelector(`.trip-main`);
@@ -73,23 +73,11 @@ if (generetedEvents.length === 0) {
         const tripEventComponent = new TripEvent(_tripEvent);
         const tripEdittorComponent = new TripEdittor(_tripEvent);
 
-        const replaceTripToTripEdit = () => {
-          eventsList.replaceChild(
-            tripEdittorComponent.getElement(), 
-            tripEventComponent.getElement())
-        };
-
-        const replaceTripEditToTrip = () => {
-          eventsList.replaceChild(
-            tripEventComponent.getElement(), 
-            tripEdittorComponent.getElement())
-        };
-
         const onEscKeyDown = (evt) => {
           const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
           if (isEscKey) {
-            replaceTripEditToTrip();
+            replace(tripEventComponent, tripEdittorComponent);
             document.removeEventListener(`keydown`, onEscKeyDown);
           }
         };
@@ -104,13 +92,13 @@ if (generetedEvents.length === 0) {
           .getElement()
           .querySelector(`.event__rollup-btn`)
           .addEventListener(`click`, () => {
-            replaceTripToTripEdit();
+            replace(tripEdittorComponent, tripEventComponent);
             document.addEventListener(`keydown`, onEscKeyDown);
           });
 
         tripEdittorComponent.getElement().addEventListener(`submit`, (evt) => {
           evt.preventDefault();
-          replaceTripEditToTrip();
+          replace(tripEventComponent, tripEdittorComponent);
         });
       });
 
