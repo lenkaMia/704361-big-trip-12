@@ -1,14 +1,12 @@
 import Sorting from "../components/trip-sort.js";
-import DaysContainer from "../components/days-container.js"
+import DaysContainer from "../components/days-container.js";
 import DayItem from "../components/day-item.js";
 import TripEvent from "../components/trip-event.js";
 import TripEdittor from "../components/trip-edittor.js";
 import {renderElement, RenderPosition, replace} from "../utils/render.js";
 import {SORT_FILTERS} from "../mock/sort-filters.js";
 
-const tripMain = document.querySelector(`.trip-main`);
 const tripEvents = document.querySelector(`.trip-events`);
-const tripInfoContainer = tripMain.querySelector(`.trip-info`);
 
 export default class Trip {
   constructor(container) {
@@ -16,20 +14,20 @@ export default class Trip {
     this._daysContainer = new DaysContainer();
   }
 
-  renderTrip(generetedEvents){
-    renderElement(
-      tripEvents,
-      new Sorting(SORT_FILTERS),
-      RenderPosition.BEFOREEND);
-
-    renderElement(
-      tripEvents,
-      this._daysContainer,
-      RenderPosition.BEFOREEND);
-
+  renderTrip(generetedEvents) {
     const dates = [
       ...new Set(generetedEvents.map((item) => new Date(item.startDate).toDateString()))
     ];
+
+    renderElement(
+        tripEvents,
+        new Sorting(SORT_FILTERS),
+        RenderPosition.BEFOREEND);
+
+    renderElement(
+        tripEvents,
+        this._daysContainer,
+        RenderPosition.BEFOREEND);
 
     dates.forEach((date, dateIndex) => {
       const day = new DayItem(new Date(date), dateIndex + 1);
@@ -37,7 +35,7 @@ export default class Trip {
 
       generetedEvents
         .filter((_tripEvent) => new Date(_tripEvent.startDate).toDateString() === date)
-        .forEach((_tripEvent, eventIndex) => {
+        .forEach((_tripEvent) => {
           const eventsList = dayElement.querySelector(`.trip-events__list`);
           const tripEventComponent = new TripEvent(_tripEvent);
           const tripEdittorComponent = new TripEdittor(_tripEvent);
@@ -52,9 +50,9 @@ export default class Trip {
           };
 
           renderElement(
-            eventsList,
-            tripEventComponent,
-            RenderPosition.BEFOREEND
+              eventsList,
+              tripEventComponent,
+              RenderPosition.BEFOREEND
           );
 
           tripEventComponent.setClickHandler(() => {
