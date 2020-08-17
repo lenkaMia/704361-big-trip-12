@@ -88,13 +88,10 @@ if (generetedEvents.length === 0) {
           RenderPosition.BEFOREEND
         );
 
-        tripEventComponent
-          .getElement()
-          .querySelector(`.event__rollup-btn`)
-          .addEventListener(`click`, () => {
-            replace(tripEdittorComponent, tripEventComponent);
-            document.addEventListener(`keydown`, onEscKeyDown);
-          });
+        tripEventComponent.setClickHandler(() => {
+          replace(tripEdittorComponent, tripEventComponent);
+          document.addEventListener(`keydown`, onEscKeyDown);
+        });
 
         tripEdittorComponent.getElement().addEventListener(`submit`, (evt) => {
           evt.preventDefault();
