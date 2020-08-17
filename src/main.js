@@ -107,7 +107,7 @@ if (generetedEvents.length === 0) {
 
         tripEdittorComponent.addEventListener(`submit`, (evt) => {
           evt.preventDefault();
-          eventsList.replaceChild(tripEventComponent, tripEdittorComponent)
+          replaceTripEditToTrip();
         });
       });
 
