@@ -1,4 +1,5 @@
-import {createElement, getTripDuration} from "../../utils.js"
+import AbstractComponent from "../abstract-component.js";
+import {getTripDuration} from "../../utils.js"
 
 const tripTitle = (events) => {
   return (
@@ -17,25 +18,13 @@ const tripTitle = (events) => {
   );
 };
 
-export default class TripTitle {
+export default class TripTitle extends AbstractComponent {
   constructor(events) {
+    super();
     this._events = events;
-    this._element = null;
   }
 
   getTemplate() {
     return tripTitle(this._events);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

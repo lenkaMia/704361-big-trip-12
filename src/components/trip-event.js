@@ -1,4 +1,5 @@
-import {createElement, parseTime} from "../utils.js";
+import {parseTime} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const createEventOffer = (offers) => {
   return offers.map((offer) => {
@@ -56,25 +57,13 @@ const getTripEvent = (tripEvent) => {
   );
 };
 
-export default class TripEvent {
+export default class TripEvent extends AbstractComponent {
   constructor(tripEvent) {
+    super();
     this._tripEvent = tripEvent;
-    this._element = null;
   }
 
   getTemplate() {
     return getTripEvent(this._tripEvent);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

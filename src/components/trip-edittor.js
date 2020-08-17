@@ -1,5 +1,6 @@
 import {EVENT_TYPES, DESTINATIONS} from "../consts.js";
-import {createElement, parseDate} from "../utils.js";
+import AbstractComponent from "./abstract-component.js"
+import {parseDate} from "../utils.js";
 
 const renderOptions = (destination) => {
   return destination.map((city) => {
@@ -147,25 +148,13 @@ const tripEdittor = (tripEvent) => {
   );
 };
 
-export default class TripEdittor {
+export default class TripEdittor extends AbstractComponent {
   constructor(tripEvent) {
+    super();
     this._tripEvent = tripEvent;
-    this._element = null;
   }
 
   getTemplate() {
     return tripEdittor(this._tripEvent);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
