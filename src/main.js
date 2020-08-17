@@ -17,24 +17,24 @@ import NoEventText from "./components/no-event-text.js";
 const tripMain = document.querySelector(`.trip-main`);
 renderElement(
   tripMain, 
-  new TripTitle(generetedEvents).getElement(),
+  new TripTitle(generetedEvents),
   RenderPosition.AFTERBEGIN);
 
 const tripInfoContainer = tripMain.querySelector(`.trip-info`);
 renderElement(
   tripInfoContainer, 
-  new TripCost().getElement(),
+  new TripCost(),
   RenderPosition.BEFOREEND);
 
 const tripControls = tripMain.querySelector(`.trip-controls`);
 renderElement(
   tripControls, 
-  new Navigation(NAV_ITEMS).getElement(), 
+  new Navigation(NAV_ITEMS), 
   RenderPosition.BEFOREEND);
 
 renderElement(
   tripControls, 
-  new Filters(MAIN_FILTERS).getElement(), 
+  new Filters(MAIN_FILTERS), 
   RenderPosition.BEFOREEND);
 
 const tripEvents = document.querySelector(`.trip-events`);
@@ -42,18 +42,18 @@ const tripEvents = document.querySelector(`.trip-events`);
 if (generetedEvents.length === 0) {
   renderElement(
     tripEvents,
-    new NoEventText().getElement(),
+    new NoEventText(),
     RenderPosition.BEFOREEND
   );
 } else {
   renderElement(
     tripEvents,
-    new Sorting(SORT_FILTERS).getElement(),
+    new Sorting(SORT_FILTERS),
     RenderPosition.BEFOREEND);
 
   renderElement(
     tripEvents,
-    new DaysContainer().getElement(),
+    new DaysContainer(),
     RenderPosition.BEFOREEND);
 
   const tripDays = tripEvents.querySelector(`.trip-days`);
@@ -63,24 +63,26 @@ if (generetedEvents.length === 0) {
   ];
 
   dates.forEach((date, dateIndex) => {
-    const day = new DayItem(
-      new Date(date),
-      dateIndex + 1
-    ).getElement();
+    const day = new DayItem(new Date(date), dateIndex + 1);
+    const dayElement = day.getElement();
 
     generetedEvents
       .filter((_tripEvent) => new Date(_tripEvent.startDate).toDateString() === date)
       .forEach((_tripEvent, eventIndex) => {
-        const eventsList = day.querySelector(`.trip-events__list`);
-        const tripEventComponent = new TripEvent(_tripEvent).getElement();
-        const tripEdittorComponent = new TripEdittor(_tripEvent).getElement();
+        const eventsList = dayElement.querySelector(`.trip-events__list`);
+        const tripEventComponent = new TripEvent(_tripEvent);
+        const tripEdittorComponent = new TripEdittor(_tripEvent);
 
         const replaceTripToTripEdit = () => {
-          eventsList.replaceChild(tripEdittorComponent, tripEventComponent)
+          eventsList.replaceChild(
+            tripEdittorComponent.getElement(), 
+            tripEventComponent.getElement())
         };
 
         const replaceTripEditToTrip = () => {
-          eventsList.replaceChild(tripEventComponent, tripEdittorComponent)
+          eventsList.replaceChild(
+            tripEventComponent.getElement(), 
+            tripEdittorComponent.getElement())
         };
 
         const onEscKeyDown = (evt) => {
@@ -99,13 +101,14 @@ if (generetedEvents.length === 0) {
         );
 
         tripEventComponent
+          .getElement()
           .querySelector(`.event__rollup-btn`)
           .addEventListener(`click`, () => {
             replaceTripToTripEdit();
             document.addEventListener(`keydown`, onEscKeyDown);
           });
 
-        tripEdittorComponent.addEventListener(`submit`, (evt) => {
+        tripEdittorComponent.getElement().addEventListener(`submit`, (evt) => {
           evt.preventDefault();
           replaceTripEditToTrip();
         });
