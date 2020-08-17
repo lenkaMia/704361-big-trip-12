@@ -11,7 +11,7 @@ import {generetedEvents} from "./mock/generated-events.js";
 import {MAIN_FILTERS} from "./mock/main-filters.js";
 import {SORT_FILTERS} from "./mock/sort-filters.js";
 import {NAV_ITEMS} from "./mock/nav-items.js";
-import {renderElement, RenderPosition} from "./utils";
+import {renderElement, RenderPosition} from "./utils/render.js";
 import NoEventText from "./components/no-event-text.js";
 
 const tripMain = document.querySelector(`.trip-main`);

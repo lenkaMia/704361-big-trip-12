@@ -1,6 +1,6 @@
 import {EVENT_TYPES, DESTINATIONS} from "../consts.js";
 import AbstractComponent from "./abstract-component.js";
-import {parseDate} from "../utils.js";
+import {parseDate} from "../utils/utils.js";
 
 const renderOptions = (destination) => {
   return destination.map((city) => {

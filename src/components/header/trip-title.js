@@ -1,5 +1,5 @@
 import AbstractComponent from "../abstract-component.js";
-import {getTripDuration} from "../../utils.js"
+import {getTripDuration} from "../../utils/utils.js"
 
 const tripTitle = (events) => {
   return (

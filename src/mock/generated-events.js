@@ -1,5 +1,5 @@
 import {EVENT_TYPES, DESTINATIONS, OFFERS, EVENT_ACTIONS_MAP} from "../consts.js";
-import {getRandomInteger, getRandomArrayItem, getRandomArray} from "../utils.js";
+import {getRandomInteger, getRandomArrayItem, getRandomArray} from "../utils/utils.js";
 
 const EVENTS_COUNT = 15;
 

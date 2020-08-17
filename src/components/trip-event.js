@@ -1,4 +1,4 @@
-import {parseTime} from "../utils.js";
+import {parseTime} from "../utils/utils.js";
 import AbstractComponent from "./abstract-component.js";
 
 const createEventOffer = (offers) => {
