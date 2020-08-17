@@ -1,5 +1,5 @@
 import {EVENT_TYPES, DESTINATIONS} from "../consts.js";
-import AbstractComponent from "./abstract-component.js"
+import AbstractComponent from "./abstract-component.js";
 import {parseDate} from "../utils.js";
 
 const renderOptions = (destination) => {
