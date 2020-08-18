@@ -15,29 +15,6 @@ export const getRandomArray = (array, start, end = array.length) => {
     .map(() => getRandomArrayItem(array));
 };
 
-export const RenderPosition = {
-  AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
-};
-
-export const renderElement = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(element);
-      break;
-  }
-};
-
-export const createElement = (template) => {
-  const element = document.createElement(`div`);
-  element.innerHTML = template;
-
-  return element.firstChild;
-};
-
 export const parseTime = (UTCTimestamp) => {
   const date = new Date(UTCTimestamp);
   return `${date.getHours()}:${date.getMinutes()}`;
@@ -46,7 +23,7 @@ export const parseTime = (UTCTimestamp) => {
 export const parseDate = (UTCTimestamp) => {
   const date = new Date(UTCTimestamp);
   return `${date.getDate()}/${date.getMonth()}/${String(
-    date.getFullYear()
+      date.getFullYear()
   ).slice(2)}`;
 };
 
