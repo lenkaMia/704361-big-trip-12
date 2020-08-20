@@ -1,17 +1,15 @@
 import Sorting from "../components/trip-sort.js";
-import DaysContainer from "../components/days-container.js";
 import DayItem from "../components/day-item.js";
 import TripEvent from "../components/trip-event.js";
 import TripEdittor from "../components/trip-edittor.js";
 import {renderElement, RenderPosition, replace} from "../utils/render.js";
-import {SORT_FILTERS} from "../mock/sort-filters.js";
+import {SortType} from "../mock/sort-type.js";
 
 const tripEvents = document.querySelector(`.trip-events`);
 
 export default class Trip {
   constructor(container) {
     this._container = container;
-    this._daysContainer = new DaysContainer();
   }
 
   renderTrip(generetedEvents) {
@@ -21,13 +19,8 @@ export default class Trip {
 
     renderElement(
         tripEvents,
-        new Sorting(SORT_FILTERS),
-        RenderPosition.BEFOREEND);
-
-    renderElement(
-        tripEvents,
-        this._daysContainer,
-        RenderPosition.BEFOREEND);
+        new Sorting(SortType),
+        RenderPosition.AFTERBEGIN);
 
     dates.forEach((date, dateIndex) => {
       const day = new DayItem(new Date(date), dateIndex + 1);
