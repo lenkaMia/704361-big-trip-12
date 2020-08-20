@@ -7,17 +7,19 @@ import {SortType} from "../mock/sort-type.js";
 
 const tripEvents = document.querySelector(`.trip-events`);
 
-const renderEventCards = (generetedEvents, container) => {
-  const dates = [
-    ...new Set(generetedEvents.map((item) => new Date(item.startDate).toDateString()))
-  ];
+const renderEventCards = (generetedEvents, container, isDefaultSorting = true) => {
+  const dates = isDefaultSorting ? 
+  [...new Set(generetedEvents.map((item) => new Date(item.startDate).toDateString()))] : [true];
 
   dates.forEach((date, dateIndex) => {
-    const day = new DayItem(new Date(date), dateIndex + 1);
+    const day = isDefaultSorting ? 
+    new DayItem(new Date(date), dateIndex + 1) : new DayItem();
     const dayElement = day.getElement();
 
     generetedEvents
-      .filter((_tripEvent) => new Date(_tripEvent.startDate).toDateString() === date)
+      .filter((_tripEvent) => { 
+        return isDefaultSorting ?
+         new Date(_tripEvent.startDate).toDateString() === date : _tripEvent;})
       .forEach((_tripEvent) => {
         const eventsList = dayElement.querySelector(`.trip-events__list`);
         const tripEventComponent = new TripEvent(_tripEvent);
@@ -69,10 +71,12 @@ export default class Trip {
 
     this._sorting.setSortChangeHandler((sortType) => {
       let sortedEvents = [];
+      let isDefaultSorting = false;
 
       switch (sortType) {
         case SortType.DATE_DOWN:
           sortedEvents = generetedEvents.slice();
+          isDefaultSorting = true;
           break;
         case SortType.TIME_DOWN:
           sortedEvents = generetedEvents.slice().sort((a, b) => b.startDate - a.startDate);
@@ -83,7 +87,7 @@ export default class Trip {
       }
 
       this._container.innerHTML = ``;
-      renderEventCards(sortedEvents, this._container);
+      renderEventCards(sortedEvents, this._container, isDefaultSorting);
     })
 
     const getFullPrice = generetedEvents.reduce((acc, item) => acc + item.price, 0);
