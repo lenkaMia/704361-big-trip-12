@@ -71,4 +71,22 @@ export default class Sorting extends AbstractComponent {
       <span class="trip-sort__item  trip-sort__item--offers">Offers</span>
     </form>`;
   }
+
+  setSortChangeHandler(cb) {
+    this.getElement().addEventListener(`click`, (evt) =>{
+      if (evt.target.tagName !== `INPUT`) {
+        return;
+      }
+
+      const sortType = evt.target.dataset.sortType;
+
+      if (this._sortings === sortType) {
+        return;
+      }
+
+      this._sortings = sortType;
+
+      cb(this._sortings);
+    })
+  }
 }

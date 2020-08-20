@@ -10,6 +10,7 @@ const tripEvents = document.querySelector(`.trip-events`);
 export default class Trip {
   constructor(container) {
     this._container = container;
+    this._sorting = new Sorting();
   }
 
   renderTrip(generetedEvents) {
@@ -19,7 +20,7 @@ export default class Trip {
 
     renderElement(
         tripEvents,
-        new Sorting(SortType),
+        this._sorting,
         RenderPosition.AFTERBEGIN);
 
     dates.forEach((date, dateIndex) => {
@@ -61,6 +62,24 @@ export default class Trip {
 
       renderElement(this._container, day, RenderPosition.BEFOREEND);
     });
+
+    this._sorting.setSortChangeHandler((sortType) => {
+      let sortedEvents = [];
+
+      switch (sortType) {
+        case SortType.DATE_DOWN:
+          sortedEvents = events.slice();
+          break;
+        case SortType.TIME_DOWN:
+          sortedEvents = events.slice().sort((a, b) => b.startDate - a.startDate);
+          break;
+        case SortType.PRICE_DOWN:
+          sortedEvents = events.slice().sort((a, b) => a.price - b.price);
+          break;
+      }
+
+      this._container.getElement().innerHTML = ``;
+    })
 
     const getFullPrice = generetedEvents.reduce((acc, item) => acc + item.price, 0);
 
