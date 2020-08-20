@@ -87,6 +87,6 @@ export default class Sorting extends AbstractComponent {
       this._sortings = sortType;
 
       cb(this._sortings);
-    })
+    });
   }
 }

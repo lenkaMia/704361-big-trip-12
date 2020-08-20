@@ -8,18 +8,19 @@ import {SortType} from "../mock/sort-type.js";
 const tripEvents = document.querySelector(`.trip-events`);
 
 const renderEventCards = (generetedEvents, container, isDefaultSorting = true) => {
-  const dates = isDefaultSorting ? 
-  [...new Set(generetedEvents.map((item) => new Date(item.startDate).toDateString()))] : [true];
+  const dates = isDefaultSorting
+    ? [...new Set(generetedEvents.map((item) => new Date(item.startDate).toDateString()))] : [true];
 
   dates.forEach((date, dateIndex) => {
-    const day = isDefaultSorting ? 
-    new DayItem(new Date(date), dateIndex + 1) : new DayItem();
+    const day = isDefaultSorting
+      ? new DayItem(new Date(date), dateIndex + 1) : new DayItem();
     const dayElement = day.getElement();
 
     generetedEvents
-      .filter((_tripEvent) => { 
-        return isDefaultSorting ?
-         new Date(_tripEvent.startDate).toDateString() === date : _tripEvent;})
+      .filter((_tripEvent) => {
+        return isDefaultSorting
+          ? new Date(_tripEvent.startDate).toDateString() === date : _tripEvent;
+      })
       .forEach((_tripEvent) => {
         const eventsList = dayElement.querySelector(`.trip-events__list`);
         const tripEventComponent = new TripEvent(_tripEvent);
@@ -35,9 +36,9 @@ const renderEventCards = (generetedEvents, container, isDefaultSorting = true) =
         };
 
         renderElement(
-          eventsList,
-          tripEventComponent,
-          RenderPosition.BEFOREEND
+            eventsList,
+            tripEventComponent,
+            RenderPosition.BEFOREEND
         );
 
         tripEventComponent.setClickHandler(() => {
@@ -53,7 +54,7 @@ const renderEventCards = (generetedEvents, container, isDefaultSorting = true) =
 
     renderElement(container, day, RenderPosition.BEFOREEND);
   });
-}
+};
 
 export default class Trip {
   constructor(container) {
@@ -62,7 +63,7 @@ export default class Trip {
   }
 
   renderTrip(generetedEvents) {
-    renderEventCards (generetedEvents, this._container);
+    renderEventCards(generetedEvents, this._container);
 
     renderElement(
         tripEvents,
@@ -88,7 +89,7 @@ export default class Trip {
 
       this._container.innerHTML = ``;
       renderEventCards(sortedEvents, this._container, isDefaultSorting);
-    })
+    });
 
     const getFullPrice = generetedEvents.reduce((acc, item) => acc + item.price, 0);
 
