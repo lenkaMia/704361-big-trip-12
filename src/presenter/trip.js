@@ -7,6 +7,52 @@ import {SortType} from "../mock/sort-type.js";
 
 const tripEvents = document.querySelector(`.trip-events`);
 
+const renderEventCards = (generetedEvents, container) => {
+  const dates = [
+    ...new Set(generetedEvents.map((item) => new Date(item.startDate).toDateString()))
+  ];
+
+  dates.forEach((date, dateIndex) => {
+    const day = new DayItem(new Date(date), dateIndex + 1);
+    const dayElement = day.getElement();
+
+    generetedEvents
+      .filter((_tripEvent) => new Date(_tripEvent.startDate).toDateString() === date)
+      .forEach((_tripEvent) => {
+        const eventsList = dayElement.querySelector(`.trip-events__list`);
+        const tripEventComponent = new TripEvent(_tripEvent);
+        const tripEdittorComponent = new TripEdittor(_tripEvent);
+
+        const onEscKeyDown = (evt) => {
+          const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+          if (isEscKey) {
+            replace(tripEventComponent, tripEdittorComponent);
+            document.removeEventListener(`keydown`, onEscKeyDown);
+          }
+        };
+
+        renderElement(
+          eventsList,
+          tripEventComponent,
+          RenderPosition.BEFOREEND
+        );
+
+        tripEventComponent.setClickHandler(() => {
+          replace(tripEdittorComponent, tripEventComponent);
+          document.addEventListener(`keydown`, onEscKeyDown);
+        });
+
+        tripEdittorComponent.setSubmitHandler((evt) => {
+          evt.preventDefault();
+          replace(tripEventComponent, tripEdittorComponent);
+        });
+      });
+
+    renderElement(container, day, RenderPosition.BEFOREEND);
+  });
+}
+
 export default class Trip {
   constructor(container) {
     this._container = container;
@@ -14,71 +60,30 @@ export default class Trip {
   }
 
   renderTrip(generetedEvents) {
-    const dates = [
-      ...new Set(generetedEvents.map((item) => new Date(item.startDate).toDateString()))
-    ];
+    renderEventCards (generetedEvents, this._container);
 
     renderElement(
         tripEvents,
         this._sorting,
         RenderPosition.AFTERBEGIN);
 
-    dates.forEach((date, dateIndex) => {
-      const day = new DayItem(new Date(date), dateIndex + 1);
-      const dayElement = day.getElement();
-
-      generetedEvents
-        .filter((_tripEvent) => new Date(_tripEvent.startDate).toDateString() === date)
-        .forEach((_tripEvent) => {
-          const eventsList = dayElement.querySelector(`.trip-events__list`);
-          const tripEventComponent = new TripEvent(_tripEvent);
-          const tripEdittorComponent = new TripEdittor(_tripEvent);
-
-          const onEscKeyDown = (evt) => {
-            const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-            if (isEscKey) {
-              replace(tripEventComponent, tripEdittorComponent);
-              document.removeEventListener(`keydown`, onEscKeyDown);
-            }
-          };
-
-          renderElement(
-              eventsList,
-              tripEventComponent,
-              RenderPosition.BEFOREEND
-          );
-
-          tripEventComponent.setClickHandler(() => {
-            replace(tripEdittorComponent, tripEventComponent);
-            document.addEventListener(`keydown`, onEscKeyDown);
-          });
-
-          tripEdittorComponent.setSubmitHandler((evt) => {
-            evt.preventDefault();
-            replace(tripEventComponent, tripEdittorComponent);
-          });
-        });
-
-      renderElement(this._container, day, RenderPosition.BEFOREEND);
-    });
-
     this._sorting.setSortChangeHandler((sortType) => {
       let sortedEvents = [];
 
       switch (sortType) {
         case SortType.DATE_DOWN:
-          sortedEvents = events.slice();
+          sortedEvents = generetedEvents.slice();
           break;
         case SortType.TIME_DOWN:
-          sortedEvents = events.slice().sort((a, b) => b.startDate - a.startDate);
+          sortedEvents = generetedEvents.slice().sort((a, b) => b.startDate - a.startDate);
           break;
         case SortType.PRICE_DOWN:
-          sortedEvents = events.slice().sort((a, b) => a.price - b.price);
+          sortedEvents = generetedEvents.slice().sort((a, b) => b.price - a.price);
           break;
       }
 
-      this._container.getElement().innerHTML = ``;
+      this._container.innerHTML = ``;
+      renderEventCards(sortedEvents, this._container);
     })
 
     const getFullPrice = generetedEvents.reduce((acc, item) => acc + item.price, 0);
