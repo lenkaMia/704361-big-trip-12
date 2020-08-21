@@ -33,7 +33,7 @@ export const formatDate = (date) => {
       month: `short`
     })) || ``
   }
-  ${ new Date(date).getDate() || `` }`
+  ${ new Date(date).getDate() || `` }`;
 };
 
 export const getTripDuration = (start, end) => {

@@ -1,8 +1,8 @@
 import AbstractComponent from "./abstract-component.js";
-import {formatDate} from "../utils/utils.js"
+import {formatDate} from "../utils/utils.js";
 
 export default class DayItem extends AbstractComponent {
-  constructor(date, day) {  
+  constructor(date, day) {
     super();
     this._date = date;
     this._day = day;

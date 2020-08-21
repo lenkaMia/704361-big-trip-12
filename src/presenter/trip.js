@@ -69,15 +69,15 @@ export default class Trip {
   renderTrip(generetedEvents) {
     if (generetedEvents.length === 0) {
       renderElement(
-        tripEvents,
-        this._noEventText,
-        RenderPosition.BEFOREEND
+          tripEvents,
+          this._noEventText,
+          RenderPosition.BEFOREEND
       );
     }
     renderElement(
-      tripEvents,
-      this._daysContainer,
-      RenderPosition.BEFOREEND);
+        tripEvents,
+        this._daysContainer,
+        RenderPosition.BEFOREEND);
 
     renderEventCards(generetedEvents, this._daysContainer);
 
