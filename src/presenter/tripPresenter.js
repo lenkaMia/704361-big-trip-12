@@ -8,18 +8,16 @@ import {renderElement, RenderPosition} from "../utils/render.js";
 import {SortType} from "../mock/sort-type.js";
 import PointPresenter from "./pointPresenter.js"
 
-const tripEvents = document.querySelector(`.trip-events`);
-
-const renderEventCards = (generetedEvents, container, isDefaultSorting = true) => {
+const renderEventCards = (events, container, isDefaultSorting = true) => {
   const dates = isDefaultSorting
-    ? [...new Set(generetedEvents.map((item) => new Date(item.startDate).toDateString()))] : [true];
+    ? [...new Set(events.map((item) => new Date(item.startDate).toDateString()))] : [true];
 
   dates.forEach((date, dateIndex) => {
     const day = isDefaultSorting
       ? new DayItem(new Date(date), dateIndex + 1) : new DayItem();
     const pointPresenter = new PointPresenter(day.getElement().querySelector(`.trip-events__list`));
 
-    generetedEvents
+    events
       .filter((_tripEvent) => {
         return isDefaultSorting
           ? new Date(_tripEvent.startDate).toDateString() === date : _tripEvent;
@@ -40,27 +38,28 @@ export default class TripPresenter {
     this._daysContainer = new DaysContainer();
   }
 
-  renderTrip(generetedEvents) {
+  init(events) {
 
-    if (generetedEvents.length === 0) {
+    if (events.length === 0) {
       renderElement(
-          tripEvents,
+          this._container,
           this._noEventText,
           RenderPosition.BEFOREEND
       );
+      return;
     }
 
     renderElement(
-        tripEvents,
+        this._container,
         this._sorting,
         RenderPosition.AFTERBEGIN);
 
     renderElement(
-        tripEvents,
+        this._container,
         this._daysContainer,
         RenderPosition.BEFOREEND);
 
-    renderEventCards(generetedEvents, this._daysContainer.getElement());
+    renderEventCards(events, this._daysContainer.getElement());
 
     this._sorting.setSortChangeHandler((sortType) => {
       let sortedEvents = [];
@@ -68,26 +67,22 @@ export default class TripPresenter {
 
       switch (sortType) {
         case SortType.DATE_DOWN:
-          sortedEvents = generetedEvents.slice();
+          sortedEvents = events.slice();
           isDefaultSorting = true;
           break;
         case SortType.TIME_DOWN:
-          sortedEvents = generetedEvents.slice().sort((a, b) => b.startDate - a.startDate);
+          sortedEvents = events.slice().sort((a, b) => b.startDate - a.startDate);
           break;
         case SortType.PRICE_DOWN:
-          sortedEvents = generetedEvents.slice().sort((a, b) => b.price - a.price);
+          sortedEvents = events.slice().sort((a, b) => b.price - a.price);
           break;
       }
 
-      this._container.innerHTML = ``;
-      renderElement(
-          tripEvents,
-          this._sorting,
-          RenderPosition.AFTERBEGIN);
-      renderEventCards(sortedEvents, tripEvents, isDefaultSorting);
+      this._daysContainer.getElement().innerHTML = ``;
+      renderEventCards(sortedEvents, this._daysContainer.getElement(), isDefaultSorting);
     });
 
-    const getFullPrice = generetedEvents.reduce((acc, item) => acc + item.price, 0);
+    const getFullPrice = events.reduce((acc, item) => acc + item.price, 0);
 
     document.querySelector(`.trip-info__cost-value`).textContent = getFullPrice;
   }

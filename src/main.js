@@ -34,4 +34,4 @@ renderElement(
 
 const tripEvents = document.querySelector(`.trip-events`);
 const tripPresenter = new TripPresenter(tripEvents);
-tripPresenter.renderTrip(generetedEvents);
+tripPresenter.init(generetedEvents);
