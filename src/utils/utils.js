@@ -27,6 +27,15 @@ export const parseDate = (UTCTimestamp) => {
   ).slice(2)}`;
 };
 
+export const formatDate = (date) => {
+  return `${
+    (date && new Date(date).toLocaleString(`en-US`, {
+      month: `short`
+    })) || ``
+  }
+  ${ new Date(date).getDate() || `` }`
+}
+
 export const getTripDuration = (start, end) => {
   const startDate = new Date(start);
   const startDay = startDate.getDate();
