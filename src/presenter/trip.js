@@ -54,7 +54,7 @@ const renderEventCards = (generetedEvents, container, isDefaultSorting = true) =
         });
       });
 
-    renderElement(container.getElement(), day, RenderPosition.BEFOREEND);
+    renderElement(container, day, RenderPosition.BEFOREEND);
   });
 };
 
@@ -67,7 +67,6 @@ export default class Trip {
   }
 
   renderTrip(generetedEvents) {
-    this._events = generetedEvents;
 
     if (generetedEvents.length === 0) {
       renderElement(
@@ -87,7 +86,7 @@ export default class Trip {
         this._daysContainer,
         RenderPosition.BEFOREEND);
 
-    renderEventCards(this._events, this._daysContainer);
+    renderEventCards(generetedEvents, this._daysContainer.getElement());
 
     this._sorting.setSortChangeHandler((sortType) => {
       let sortedEvents = [];
@@ -107,7 +106,11 @@ export default class Trip {
       }
 
       this._container.innerHTML = ``;
-      renderEventCards(sortedEvents, this._container, isDefaultSorting);
+      renderElement(
+        tripEvents,
+        this._sorting,
+        RenderPosition.AFTERBEGIN);
+      renderEventCards(sortedEvents, tripEvents, isDefaultSorting);
     });
 
     const getFullPrice = generetedEvents.reduce((acc, item) => acc + item.price, 0);
