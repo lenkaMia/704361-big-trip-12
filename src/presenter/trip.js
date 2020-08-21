@@ -107,9 +107,9 @@ export default class Trip {
 
       this._container.innerHTML = ``;
       renderElement(
-        tripEvents,
-        this._sorting,
-        RenderPosition.AFTERBEGIN);
+          tripEvents,
+          this._sorting,
+          RenderPosition.AFTERBEGIN);
       renderEventCards(sortedEvents, tripEvents, isDefaultSorting);
     });
 
