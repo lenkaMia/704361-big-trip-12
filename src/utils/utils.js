@@ -15,9 +15,18 @@ export const getRandomArray = (array, start, end = array.length) => {
     .map(() => getRandomArrayItem(array));
 };
 
+const formatTime = (value) => {
+  if (value === 0) {
+    return `00`;
+  } else if (value < 10) {
+    return `0${value}`;
+  }
+  return value;
+};
+
 export const parseTime = (UTCTimestamp) => {
   const date = new Date(UTCTimestamp);
-  return `${date.getHours()}:${date.getMinutes()}`;
+  return `${formatTime(date.getHours())}:${formatTime(date.getMinutes())}`;
 };
 
 export const parseDate = (UTCTimestamp) => {
