@@ -2,6 +2,8 @@ import Sorting from "../components/trip-sort.js";
 import DayItem from "../components/day-item.js";
 import TripEvent from "../components/trip-event.js";
 import TripEdittor from "../components/trip-edittor.js";
+import NoEventText from "../components/no-event-text.js";
+import DaysContainer from "../components/days-container.js";
 import {renderElement, RenderPosition, replace} from "../utils/render.js";
 import {SortType} from "../mock/sort-type.js";
 
@@ -52,7 +54,7 @@ const renderEventCards = (generetedEvents, container, isDefaultSorting = true) =
         });
       });
 
-    renderElement(container, day, RenderPosition.BEFOREEND);
+    renderElement(container.getElement(), day, RenderPosition.BEFOREEND);
   });
 };
 
@@ -60,10 +62,24 @@ export default class Trip {
   constructor(container) {
     this._container = container;
     this._sorting = new Sorting();
+    this._noEventText = new NoEventText();
+    this._daysContainer = new DaysContainer();
   }
 
   renderTrip(generetedEvents) {
-    renderEventCards(generetedEvents, this._container);
+    if (generetedEvents.length === 0) {
+      renderElement(
+        tripEvents,
+        this._noEventText,
+        RenderPosition.BEFOREEND
+      );
+    }
+    renderElement(
+      tripEvents,
+      this._daysContainer,
+      RenderPosition.BEFOREEND);
+
+    renderEventCards(generetedEvents, this._daysContainer);
 
     renderElement(
         tripEvents,

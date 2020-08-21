@@ -34,7 +34,7 @@ export const formatDate = (date) => {
     })) || ``
   }
   ${ new Date(date).getDate() || `` }`
-}
+};
 
 export const getTripDuration = (start, end) => {
   const startDate = new Date(start);
