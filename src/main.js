@@ -2,7 +2,7 @@ import TripTitle from "./components/header/trip-title.js";
 import TripCost from "./components/header/trip-cost.js";
 import Navigation from "./components/header/page-navigation.js";
 import Filters from "./components/header/trip-filter.js";
-import Trip from "./presenter/trip.js"
+import TripPresenter from "./presenter/tripPresenter.js"
 import {generetedEvents} from "./mock/generated-events.js";
 import {MAIN_FILTERS} from "./mock/main-filters.js";
 import {NAV_ITEMS} from "./mock/nav-items.js";
@@ -33,5 +33,5 @@ renderElement(
   RenderPosition.BEFOREEND);
 
 const tripEvents = document.querySelector(`.trip-events`);
-const tripPresenter = new Trip(tripEvents);
+const tripPresenter = new TripPresenter(tripEvents);
 tripPresenter.renderTrip(generetedEvents);

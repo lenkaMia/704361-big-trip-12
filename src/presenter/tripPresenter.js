@@ -1,11 +1,12 @@
 import Sorting from "../components/trip-sort.js";
 import DayItem from "../components/day-item.js";
-import TripEvent from "../components/trip-event.js";
-import TripEdittor from "../components/trip-edittor.js";
+// import TripEvent from "../components/trip-event.js";
+// import TripEdittor from "../components/trip-edittor.js";
 import NoEventText from "../components/no-event-text.js";
 import DaysContainer from "../components/days-container.js";
-import {renderElement, RenderPosition, replace} from "../utils/render.js";
+import {renderElement, RenderPosition} from "../utils/render.js";
 import {SortType} from "../mock/sort-type.js";
+import PointPresenter from "./pointPresenter.js"
 
 const tripEvents = document.querySelector(`.trip-events`);
 
@@ -16,7 +17,7 @@ const renderEventCards = (generetedEvents, container, isDefaultSorting = true) =
   dates.forEach((date, dateIndex) => {
     const day = isDefaultSorting
       ? new DayItem(new Date(date), dateIndex + 1) : new DayItem();
-    const dayElement = day.getElement();
+    const pointPresenter = new PointPresenter(day.getElement().querySelector(`.trip-events__list`));
 
     generetedEvents
       .filter((_tripEvent) => {
@@ -24,41 +25,14 @@ const renderEventCards = (generetedEvents, container, isDefaultSorting = true) =
           ? new Date(_tripEvent.startDate).toDateString() === date : _tripEvent;
       })
       .forEach((_tripEvent) => {
-        const eventsList = dayElement.querySelector(`.trip-events__list`);
-        const tripEventComponent = new TripEvent(_tripEvent);
-        const tripEdittorComponent = new TripEdittor(_tripEvent);
-
-        const onEscKeyDown = (evt) => {
-          const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-          if (isEscKey) {
-            replace(tripEventComponent, tripEdittorComponent);
-            document.removeEventListener(`keydown`, onEscKeyDown);
-          }
-        };
-
-        renderElement(
-            eventsList,
-            tripEventComponent,
-            RenderPosition.BEFOREEND
-        );
-
-        tripEventComponent.setClickHandler(() => {
-          replace(tripEdittorComponent, tripEventComponent);
-          document.addEventListener(`keydown`, onEscKeyDown);
-        });
-
-        tripEdittorComponent.setSubmitHandler((evt) => {
-          evt.preventDefault();
-          replace(tripEventComponent, tripEdittorComponent);
-        });
+        pointPresenter.render(_tripEvent);
       });
 
     renderElement(container, day, RenderPosition.BEFOREEND);
   });
 };
 
-export default class Trip {
+export default class TripPresenter {
   constructor(container) {
     this._container = container;
     this._sorting = new Sorting();
