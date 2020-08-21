@@ -67,6 +67,8 @@ export default class Trip {
   }
 
   renderTrip(generetedEvents) {
+    this._events = generetedEvents;
+
     if (generetedEvents.length === 0) {
       renderElement(
           tripEvents,
@@ -74,17 +76,18 @@ export default class Trip {
           RenderPosition.BEFOREEND
       );
     }
-    renderElement(
-        tripEvents,
-        this._daysContainer,
-        RenderPosition.BEFOREEND);
-
-    renderEventCards(generetedEvents, this._daysContainer);
 
     renderElement(
         tripEvents,
         this._sorting,
         RenderPosition.AFTERBEGIN);
+
+    renderElement(
+        tripEvents,
+        this._daysContainer,
+        RenderPosition.BEFOREEND);
+
+    renderEventCards(this._events, this._daysContainer);
 
     this._sorting.setSortChangeHandler((sortType) => {
       let sortedEvents = [];
