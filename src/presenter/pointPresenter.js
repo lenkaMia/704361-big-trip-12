@@ -21,9 +21,9 @@ export default class PointPresenter {
     };
 
     renderElement(
-      this._container,
-      tripEventComponent,
-      RenderPosition.BEFOREEND
+        this._container,
+        tripEventComponent,
+        RenderPosition.BEFOREEND
     );
 
     tripEventComponent.setClickHandler(() => {

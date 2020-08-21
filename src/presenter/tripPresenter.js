@@ -6,7 +6,7 @@ import NoEventText from "../components/no-event-text.js";
 import DaysContainer from "../components/days-container.js";
 import {renderElement, RenderPosition} from "../utils/render.js";
 import {SortType} from "../mock/sort-type.js";
-import PointPresenter from "./pointPresenter.js"
+import PointPresenter from "./pointPresenter.js";
 
 const renderEventCards = (events, container, isDefaultSorting = true) => {
   const dates = isDefaultSorting
