@@ -2,8 +2,7 @@ import TripTitle from "./components/header/trip-title.js";
 import TripCost from "./components/header/trip-cost.js";
 import Navigation from "./components/header/page-navigation.js";
 import Filters from "./components/header/trip-filter.js";
-import NoEventText from "./components/no-event-text.js";
-import Trip from "./presenter/trip.js"
+import TripPresenter from "./presenter/tripPresenter.js"
 import {generetedEvents} from "./mock/generated-events.js";
 import {MAIN_FILTERS} from "./mock/main-filters.js";
 import {NAV_ITEMS} from "./mock/nav-items.js";
@@ -34,14 +33,5 @@ renderElement(
   RenderPosition.BEFOREEND);
 
 const tripEvents = document.querySelector(`.trip-events`);
-
-if (generetedEvents.length === 0) {
-  renderElement(
-    tripEvents,
-    new NoEventText(),
-    RenderPosition.BEFOREEND
-  );
-} else {
-  const tripPresenter = new Trip(tripEvents);
-  tripPresenter.renderTrip(generetedEvents);
-}
+const tripPresenter = new TripPresenter(tripEvents);
+tripPresenter.init(generetedEvents);

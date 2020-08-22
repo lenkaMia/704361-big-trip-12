@@ -15,9 +15,18 @@ export const getRandomArray = (array, start, end = array.length) => {
     .map(() => getRandomArrayItem(array));
 };
 
+const formatTime = (value) => {
+  if (value === 0) {
+    return `00`;
+  } else if (value < 10) {
+    return `0${value}`;
+  }
+  return value;
+};
+
 export const parseTime = (UTCTimestamp) => {
   const date = new Date(UTCTimestamp);
-  return `${date.getHours()}:${date.getMinutes()}`;
+  return `${formatTime(date.getHours())}:${formatTime(date.getMinutes())}`;
 };
 
 export const parseDate = (UTCTimestamp) => {
@@ -25,6 +34,15 @@ export const parseDate = (UTCTimestamp) => {
   return `${date.getDate()}/${date.getMonth()}/${String(
       date.getFullYear()
   ).slice(2)}`;
+};
+
+export const formatDate = (date) => {
+  return `${
+    (date && new Date(date).toLocaleString(`en-US`, {
+      month: `short`
+    })) || ``
+  }
+  ${ new Date(date).getDate() || `` }`;
 };
 
 export const getTripDuration = (start, end) => {
