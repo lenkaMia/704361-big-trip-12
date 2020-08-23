@@ -161,4 +161,10 @@ export default class TripEdittor extends AbstractComponent {
   setSubmitHandler(handler) {
     this.getElement().addEventListener(`submit`, handler);
   }
+
+  setFavoriteClickHandler(handler) {
+    this.getElement()
+      .querySelector(`.event__favorite-checkbox`)
+      .addEventListener(`click`, handler);
+  }
 }
