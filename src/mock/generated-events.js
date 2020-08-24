@@ -32,7 +32,8 @@ const generateTripEvent = () => {
     description: getRandomArray(descriptionSentences, 1, 5).join(`. `),
     photos: new Array(getRandomInteger(1, 8))
       .fill(``)
-      .map(() => `http://picsum.photos/248/152?r=${Math.random()}`)
+      .map(() => `http://picsum.photos/248/152?r=${Math.random()}`),
+    isFavorite: false
   };
 };
 

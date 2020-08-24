@@ -23,7 +23,7 @@ const renderEventCards = (events, container, isDefaultSorting = true) => {
           ? new Date(_tripEvent.startDate).toDateString() === date : _tripEvent;
       })
       .forEach((_tripEvent) => {
-        pointPresenter.render(_tripEvent);
+        pointPresenter.init(_tripEvent);
       });
 
     renderElement(container, day, RenderPosition.BEFOREEND);
@@ -59,7 +59,7 @@ export default class TripPresenter {
         this._daysContainer,
         RenderPosition.BEFOREEND);
 
-    renderEventCards(events, this._daysContainer.getElement());
+    renderEventCards(events, this._daysContainer.getElement(), this._onDataChange);
 
     this._sorting.setSortChangeHandler((sortType) => {
       let sortedEvents = [];
@@ -86,4 +86,8 @@ export default class TripPresenter {
 
     document.querySelector(`.trip-info__cost-value`).textContent = getFullPrice;
   }
+
+  // _onDataChange(oldTripEvent, newTripEvent, pointPresenter) {
+    
+  // }
 }

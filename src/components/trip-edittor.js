@@ -62,7 +62,7 @@ const getOffers = (offers) => {
 };
 
 const tripEdittor = (tripEvent) => {
-  const {type, destination, description, offers, action, photos, startDate, endDate} = tripEvent;
+  const {type, destination, description, offers, price, action, photos, startDate, endDate, isFavorite} = tripEvent;
   const typesTransferList = eventTypeList(EVENT_TYPES.slice(0, 7));
   const typesActivitiesList = eventTypeList(EVENT_TYPES.slice(7, 10));
   const tripOptions = renderOptions(DESTINATIONS);
@@ -117,11 +117,11 @@ const tripEdittor = (tripEvent) => {
                   <span class="visually-hidden">Price</span>
                   &euro;
                 </label>
-                <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+                <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
               </div>
               <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
               <button class="event__reset-btn" type="reset">Delete</button>
-              <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" checked="">
+              <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite && `checked`}>
               <label class="event__favorite-btn" for="event-favorite-1">
                         <span class="visually-hidden">Add to favorite</span>
                         <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">

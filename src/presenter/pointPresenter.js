@@ -3,11 +3,12 @@ import TripEdittor from "../components/trip-edittor.js";
 import {renderElement, RenderPosition, replace} from "../utils/render.js";
 
 export default class PointPresenter {
-  constructor(container) {
+  constructor(container, onDataChange) {
     this._container = container;
+    this._onDataChange = onDataChange;
   }
 
-  render(tripEvent) {
+  init(tripEvent) {
     const tripEventComponent = new TripEvent(tripEvent);
     const tripEdittorComponent = new TripEdittor(tripEvent);
 
@@ -34,6 +35,11 @@ export default class PointPresenter {
     tripEdittorComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
       replace(tripEventComponent, tripEdittorComponent);
+    });
+
+    tripEdittorComponent.setFavoriteClickHandler(() => {
+      const newTripEvent = Object.assign({}, tripEvent, {isFavorite: !tripEvent.isFavorite});
+      this._onDataChange(tripEvent, newTripEvent);
     });
   }
 }
