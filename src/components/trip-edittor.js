@@ -152,6 +152,7 @@ export default class TripEdittor extends SmartComponent {
   constructor(tripEvent) {
     super();
     this._tripEvent = tripEvent;
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
@@ -166,5 +167,21 @@ export default class TripEdittor extends SmartComponent {
     this.getElement()
       .querySelector(`.event__favorite-checkbox`)
       .addEventListener(`click`, handler);
+  }
+
+  restoreHandlers() {
+    this._subscribeOnEvents();
+  }
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+    element
+      .querySelector(`.event__type-list`)
+      .addEventListener(`click`, (evt) => {
+        if (evt.target.tagName === `INPUT`) {
+          this._typeEvent.type = evt.target.value;
+          this.updateElement();
+        }
+      });
   }
 }
