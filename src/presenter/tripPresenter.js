@@ -87,7 +87,5 @@ export default class TripPresenter {
     document.querySelector(`.trip-info__cost-value`).textContent = getFullPrice;
   }
 
-  // _onDataChange(oldTripEvent, newTripEvent, pointPresenter) {
-    
-  // }
+  // _onDataChange(oldTripEvent, newTripEvent, pointPresenter) {}
 }
