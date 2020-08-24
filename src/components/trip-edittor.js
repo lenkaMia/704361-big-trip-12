@@ -1,5 +1,5 @@
 import {EVENT_TYPES, DESTINATIONS} from "../consts.js";
-import AbstractComponent from "./abstract-component.js";
+import SmartComponent from "./smart-component";
 import {parseDate} from "../utils/utils.js";
 
 const renderOptions = (destination) => {
@@ -148,7 +148,7 @@ const tripEdittor = (tripEvent) => {
   );
 };
 
-export default class TripEdittor extends AbstractComponent {
+export default class TripEdittor extends SmartComponent {
   constructor(tripEvent) {
     super();
     this._tripEvent = tripEvent;
