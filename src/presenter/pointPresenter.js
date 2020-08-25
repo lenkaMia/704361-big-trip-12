@@ -1,6 +1,6 @@
 import TripEvent from "../components/trip-event.js";
 import TripEventForm from "../components/trip-event-form.js";
-import {renderElement, RenderPosition, replace} from "../utils/render.js";
+import {renderElement, RenderPosition, replace, remove} from "../utils/render.js";
 
 export default class PointPresenter {
   constructor(container, onDataChange) {
@@ -51,5 +51,12 @@ export default class PointPresenter {
           RenderPosition.BEFOREEND
       );
     }
+    // Нужен ли тут этот функционал?
+    // remove(oldTripEventComponent);
+    // remove(oldTripEventFormComponent);
+  }
+  destroy() {
+    remove(this._tripEventComponent);
+    remove(this._tripEventFormComponent);
   }
 }
