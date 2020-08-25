@@ -46,9 +46,9 @@ export default class PointPresenter {
       replace(this._tripEventFormComponent, oldTripEventFormComponent);
     } else {
       renderElement(
-        this._container,
-        this._tripEventComponent,
-        RenderPosition.BEFOREEND
+          this._container,
+          this._tripEventComponent,
+          RenderPosition.BEFOREEND
       );
     }
   }

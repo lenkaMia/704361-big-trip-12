@@ -1,4 +1,4 @@
-import { EVENT_TYPES, DESTINATIONS, EVENT_ACTIONS_MAP} from "../consts.js";
+import {EVENT_TYPES, DESTINATIONS, EVENT_ACTIONS_MAP} from "../consts.js";
 import SmartComponent from "./smart-component";
 import {parseDate} from "../utils/utils.js";
 
@@ -182,7 +182,7 @@ export default class TripEventForm extends SmartComponent {
 
   _recoveryListeners() {
     this.setFavoriteClickHandler(this._favoriteHandler);
-    this.setSubmitHandler(this._submitHandler); 
+    this.setSubmitHandler(this._submitHandler);
   }
 
   _subscribeOnEvents() {

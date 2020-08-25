@@ -85,10 +85,10 @@ export default class TripPresenter {
 
       this._daysContainer.getElement().innerHTML = ``;
       renderEventCards(
-        sortedEvents,
-        this._daysContainer.getElement(),
-        this._onDataChange,
-        isDefaultSorting);
+          sortedEvents,
+          this._daysContainer.getElement(),
+          this._onDataChange,
+          isDefaultSorting);
     });
 
     const getFullPrice = events.reduce((acc, item) => acc + item.price, 0);
