@@ -109,6 +109,6 @@ export default class TripPresenter {
       ...this._events.slice(index + 1)
     ];
 
-    pointPresenter.render(this._events[index]);
+    pointPresenter.render(newData);
   }
 }
