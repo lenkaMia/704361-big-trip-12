@@ -2,12 +2,19 @@ import TripEvent from "../components/trip-event.js";
 import TripEventForm from "../components/trip-event-form.js";
 import {renderElement, RenderPosition, replace, remove} from "../utils/render.js";
 
+const Mode = {
+  DEFAULT: `default`,
+  EDIT: `edit`
+};
+
 export default class PointPresenter {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
     this._tripEventComponent = null;
     this._tripEventFormComponent = null;
+    this._mode = Mode.DEFAULT;
   }
 
   render(tripEvent) {
@@ -21,19 +28,19 @@ export default class PointPresenter {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
       if (isEscKey) {
-        replace(this._tripEventComponent, this._tripEventFormComponent);
+        this._replaceTripEventFormToTripEvent();
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
 
     this._tripEventComponent.setClickHandler(() => {
-      replace(this._tripEventFormComponent, this._tripEventComponent);
+      this._replaceTripEventToTripFormEvent();
       document.addEventListener(`keydown`, onEscKeyDown);
     });
 
     this._tripEventFormComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      replace(this._tripEventComponent, this._tripEventFormComponent);
+      this._replaceTripEventFormToTripEvent();
     });
 
     this._tripEventFormComponent.setFavoriteClickHandler(() => {
@@ -58,5 +65,22 @@ export default class PointPresenter {
   destroy() {
     remove(this._tripEventComponent);
     remove(this._tripEventFormComponent);
+  }
+
+  _replaceTripEventFormToTripEvent() {
+    replace(this._tripEventComponent, this._tripEventFormComponent);
+    this._mode = Mode.DEFAULT;
+  }
+
+  _replaceTripEventToTripFormEvent() {
+    this._onViewChange();
+    replace(this._tripEventFormComponent, this._tripEventComponent);
+    this._mode = Mode.EDIT;
+  }
+
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceTripEventFormToTripEvent();
+    }
   }
 }

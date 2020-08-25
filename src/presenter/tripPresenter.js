@@ -6,7 +6,8 @@ import {renderElement, RenderPosition} from "../utils/render.js";
 import {SortType} from "../mock/sort-type.js";
 import PointPresenter from "./pointPresenter.js";
 
-const renderEventCards = (events, container, onDataChange, isDefaultSorting = true) => {
+const renderEventCards = (events, container, onDataChange, onViewChange, isDefaultSorting = true) => {
+  const pointPresenters = [];
   const dates = isDefaultSorting
     ? [...new Set(events.map((item) => new Date(item.startDate).toDateString()))] : [true];
 
@@ -20,12 +21,15 @@ const renderEventCards = (events, container, onDataChange, isDefaultSorting = tr
           ? new Date(_tripEvent.startDate).toDateString() === date : _tripEvent;
       })
       .forEach((_tripEvent) => {
-        const pointPresenter = new PointPresenter(day.getElement().querySelector(`.trip-events__list`), onDataChange);
+        const pointPresenter = new PointPresenter(day.getElement().querySelector(`.trip-events__list`), onDataChange, onViewChange);
         pointPresenter.render(_tripEvent);
+        pointPresenters.push(pointPresenter);
       });
 
     renderElement(container, day, RenderPosition.BEFOREEND);
   });
+
+  return pointPresenters;
 };
 
 export default class TripPresenter {
@@ -36,6 +40,7 @@ export default class TripPresenter {
     this._daysContainer = new DaysContainer();
 
     this._onDataChange = this._onDataChange.bind(this);
+    this._onViewChange = this._onViewChange.bind(this);
 
     this._events = [];
   }
@@ -64,7 +69,12 @@ export default class TripPresenter {
         this._daysContainer,
         RenderPosition.BEFOREEND);
 
-    renderEventCards(events, this._daysContainer.getElement(), this._onDataChange);
+    this._openedPointPresenters = renderEventCards(
+        events,
+        this._daysContainer.getElement(),
+        this._onDataChange,
+        this._onViewChange
+    );
 
     this._sorting.setSortChangeHandler((sortType) => {
       let sortedEvents = [];
@@ -84,10 +94,11 @@ export default class TripPresenter {
       }
 
       this._daysContainer.getElement().innerHTML = ``;
-      renderEventCards(
+      this._openedPointPresenters = renderEventCards(
           sortedEvents,
           this._daysContainer.getElement(),
           this._onDataChange,
+          this._onViewChange,
           isDefaultSorting);
     });
 
@@ -110,5 +121,9 @@ export default class TripPresenter {
     ];
 
     pointPresenter.render(newData);
+  }
+
+  _onViewChange() {
+    this._openedPointPresenters.forEach((it) => it.setDefaultView());
   }
 }
