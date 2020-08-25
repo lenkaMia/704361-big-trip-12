@@ -1,4 +1,4 @@
-import {EVENT_TYPES, DESTINATIONS} from "../consts.js";
+import { EVENT_TYPES, DESTINATIONS, EVENT_ACTIONS_MAP} from "../consts.js";
 import SmartComponent from "./smart-component";
 import {parseDate} from "../utils/utils.js";
 
@@ -61,8 +61,8 @@ const getOffers = (offers) => {
   );
 };
 
-const tripEdittor = (tripEvent) => {
-  const {type, destination, description, offers, price, action, photos, startDate, endDate, isFavorite} = tripEvent;
+const tripEventForm = (tripEvent) => {
+  const {type, destination, description, offers, price, photos, startDate, endDate, isFavorite} = tripEvent;
   const typesTransferList = eventTypeList(EVENT_TYPES.slice(0, 7));
   const typesActivitiesList = eventTypeList(EVENT_TYPES.slice(7, 10));
   const tripOptions = renderOptions(DESTINATIONS);
@@ -94,7 +94,7 @@ const tripEdittor = (tripEvent) => {
               </div>
               <div class="event__field-group  event__field-group--destination">
                 <label class="event__label  event__type-output" for="event-destination-1">
-                  ${type} ${action}
+                  ${type} ${EVENT_ACTIONS_MAP[type]}
                 </label>
                 <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
                 <datalist id="destination-list-1">
@@ -148,22 +148,28 @@ const tripEdittor = (tripEvent) => {
   );
 };
 
-export default class TripEdittor extends SmartComponent {
-  constructor(tripEvent) {
+export default class TripEventForm extends SmartComponent {
+  constructor(event) {
     super();
-    this._tripEvent = tripEvent;
+    this._event = event;
+    // this._type = event.type;   не получается использовать
+
+    this._favoriteHandler = null;
+    this._submitHandler = null;
     this._subscribeOnEvents();
   }
 
   getTemplate() {
-    return tripEdittor(this._tripEvent);
+    return tripEventForm(this._event);
   }
 
   setSubmitHandler(handler) {
+    this._submitHandler = handler;
     this.getElement().addEventListener(`submit`, handler);
   }
 
   setFavoriteClickHandler(handler) {
+    this._favoriteHandler = handler;
     this.getElement()
       .querySelector(`.event__favorite-checkbox`)
       .addEventListener(`click`, handler);
@@ -171,6 +177,12 @@ export default class TripEdittor extends SmartComponent {
 
   restoreHandlers() {
     this._subscribeOnEvents();
+    this._recoveryListeners();
+  }
+
+  _recoveryListeners() {
+    this.setFavoriteClickHandler(this._favoriteHandler);
+    this.setSubmitHandler(this._submitHandler); 
   }
 
   _subscribeOnEvents() {
@@ -179,8 +191,8 @@ export default class TripEdittor extends SmartComponent {
       .querySelector(`.event__type-list`)
       .addEventListener(`click`, (evt) => {
         if (evt.target.tagName === `INPUT`) {
-          this._typeEvent.type = evt.target.value;
-          this.updateElement();
+          this._event.type = evt.target.value;
+          this.rerender();
         }
       });
   }

@@ -1,45 +1,55 @@
 import TripEvent from "../components/trip-event.js";
-import TripEdittor from "../components/trip-edittor.js";
+import TripEventForm from "../components/trip-event-form.js";
 import {renderElement, RenderPosition, replace} from "../utils/render.js";
 
 export default class PointPresenter {
   constructor(container, onDataChange) {
     this._container = container;
     this._onDataChange = onDataChange;
+    this._tripEventComponent = null;
+    this._tripEventFormComponent = null;
   }
 
-  init(tripEvent) {
-    const tripEventComponent = new TripEvent(tripEvent);
-    const tripEdittorComponent = new TripEdittor(tripEvent);
+  render(tripEvent) {
+    const oldTripEventComponent = this._tripEventComponent;
+    const oldTripEventFormComponent = this._tripEventFormComponent;
+
+    this._tripEventComponent = new TripEvent(tripEvent);
+    this._tripEventFormComponent = new TripEventForm(tripEvent);
 
     const onEscKeyDown = (evt) => {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
       if (isEscKey) {
-        replace(tripEventComponent, tripEdittorComponent);
+        replace(this._tripEventComponent, this._tripEventFormComponent);
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
 
-    renderElement(
-        this._container,
-        tripEventComponent,
-        RenderPosition.BEFOREEND
-    );
-
-    tripEventComponent.setClickHandler(() => {
-      replace(tripEdittorComponent, tripEventComponent);
+    this._tripEventComponent.setClickHandler(() => {
+      replace(this._tripEventFormComponent, this._tripEventComponent);
       document.addEventListener(`keydown`, onEscKeyDown);
     });
 
-    tripEdittorComponent.setSubmitHandler((evt) => {
+    this._tripEventFormComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      replace(tripEventComponent, tripEdittorComponent);
+      replace(this._tripEventComponent, this._tripEventFormComponent);
     });
 
-    tripEdittorComponent.setFavoriteClickHandler(() => {
+    this._tripEventFormComponent.setFavoriteClickHandler(() => {
       const newTripEvent = Object.assign({}, tripEvent, {isFavorite: !tripEvent.isFavorite});
-      this._onDataChange(tripEvent, newTripEvent);
+      this._onDataChange(tripEvent, newTripEvent, this);
     });
+
+    if (oldTripEventComponent && oldTripEventFormComponent) {
+      replace(this._tripEventComponent, oldTripEventComponent);
+      replace(this._tripEventFormComponent, oldTripEventFormComponent);
+    } else {
+      renderElement(
+        this._container,
+        this._tripEventComponent,
+        RenderPosition.BEFOREEND
+      );
+    }
   }
 }

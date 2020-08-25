@@ -1,4 +1,4 @@
-import {EVENT_TYPES, DESTINATIONS, OFFERS, EVENT_ACTIONS_MAP} from "../consts.js";
+import {EVENT_TYPES, DESTINATIONS, OFFERS} from "../consts.js";
 import {getRandomInteger, getRandomArrayItem, getRandomArray} from "../utils/utils.js";
 
 const EVENTS_COUNT = 15;
@@ -24,7 +24,6 @@ const generateTripEvent = () => {
     type,
     destination: getRandomArrayItem(DESTINATIONS),
     price: getRandomInteger(10, 200),
-    action: EVENT_ACTIONS_MAP[type],
     startDate: Math.min(startDate, endDate),
     endDate: Math.max(startDate, endDate),
     offers: getRandomArray(aviableOffers, 0),

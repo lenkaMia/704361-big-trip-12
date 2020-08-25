@@ -31,7 +31,7 @@ export const parseTime = (UTCTimestamp) => {
 
 export const parseDate = (UTCTimestamp) => {
   const date = new Date(UTCTimestamp);
-  return `${date.getDate()}/${date.getMonth()}/${String(
+  return `${date.getDate()}/${date.getMonth() + 1}/${String(
       date.getFullYear()
   ).slice(2)}`;
 };

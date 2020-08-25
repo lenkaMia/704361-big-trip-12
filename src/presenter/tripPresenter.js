@@ -1,21 +1,18 @@
 import Sorting from "../components/trip-sort.js";
 import DayItem from "../components/day-item.js";
-// import TripEvent from "../components/trip-event.js";
-// import TripEdittor from "../components/trip-edittor.js";
 import NoEventText from "../components/no-event-text.js";
 import DaysContainer from "../components/days-container.js";
 import {renderElement, RenderPosition} from "../utils/render.js";
 import {SortType} from "../mock/sort-type.js";
 import PointPresenter from "./pointPresenter.js";
 
-const renderEventCards = (events, container, isDefaultSorting = true) => {
+const renderEventCards = (events, container, onDataChange, isDefaultSorting = true) => {
   const dates = isDefaultSorting
     ? [...new Set(events.map((item) => new Date(item.startDate).toDateString()))] : [true];
 
   dates.forEach((date, dateIndex) => {
     const day = isDefaultSorting
       ? new DayItem(new Date(date), dateIndex + 1) : new DayItem();
-    const pointPresenter = new PointPresenter(day.getElement().querySelector(`.trip-events__list`));
 
     events
       .filter((_tripEvent) => {
@@ -23,7 +20,8 @@ const renderEventCards = (events, container, isDefaultSorting = true) => {
           ? new Date(_tripEvent.startDate).toDateString() === date : _tripEvent;
       })
       .forEach((_tripEvent) => {
-        pointPresenter.init(_tripEvent);
+        const pointPresenter = new PointPresenter(day.getElement().querySelector(`.trip-events__list`), onDataChange);
+        pointPresenter.render(_tripEvent);
       });
 
     renderElement(container, day, RenderPosition.BEFOREEND);
@@ -36,9 +34,16 @@ export default class TripPresenter {
     this._sorting = new Sorting();
     this._noEventText = new NoEventText();
     this._daysContainer = new DaysContainer();
+
+    this._onDataChange = this._onDataChange.bind(this);
+
+    this._events = [];
   }
 
   init(events) {
+    if (this._events.length === 0) {
+      this._events = events;
+    }
 
     if (events.length === 0) {
       renderElement(
@@ -79,7 +84,11 @@ export default class TripPresenter {
       }
 
       this._daysContainer.getElement().innerHTML = ``;
-      renderEventCards(sortedEvents, this._daysContainer.getElement(), isDefaultSorting);
+      renderEventCards(
+        sortedEvents,
+        this._daysContainer.getElement(),
+        this._onDataChange,
+        isDefaultSorting);
     });
 
     const getFullPrice = events.reduce((acc, item) => acc + item.price, 0);
@@ -87,5 +96,19 @@ export default class TripPresenter {
     document.querySelector(`.trip-info__cost-value`).textContent = getFullPrice;
   }
 
-  // _onDataChange(oldTripEvent, newTripEvent, pointPresenter) {}
+  _onDataChange(oldData, newData, pointPresenter) {
+    const index = this._events.findIndex((it) => it === oldData);
+
+    if (index === -1) {
+      return;
+    }
+
+    this.events = [
+      ...this._events.slice(0, index),
+      newData,
+      ...this._events.slice(index + 1)
+    ];
+
+    pointPresenter.render(this._events[index]);
+  }
 }
