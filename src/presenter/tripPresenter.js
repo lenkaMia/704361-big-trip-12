@@ -46,10 +46,8 @@ export default class TripPresenter {
   }
 
   init(events) {
-    if (this._events.length === 0) {
-      this._events = events;
-    }
-
+    this._events = events;
+    
     if (events.length === 0) {
       renderElement(
           this._container,
@@ -69,7 +67,7 @@ export default class TripPresenter {
         this._daysContainer,
         RenderPosition.BEFOREEND);
 
-    this._openedPointPresenters = renderEventCards(
+    this._pointPresenters = renderEventCards(
         events,
         this._daysContainer.getElement(),
         this._onDataChange,
@@ -94,7 +92,7 @@ export default class TripPresenter {
       }
 
       this._daysContainer.getElement().innerHTML = ``;
-      this._openedPointPresenters = renderEventCards(
+      this._pointPresenters = renderEventCards(
           sortedEvents,
           this._daysContainer.getElement(),
           this._onDataChange,
@@ -124,6 +122,6 @@ export default class TripPresenter {
   }
 
   _onViewChange() {
-    this._openedPointPresenters.forEach((it) => it.setDefaultView());
+    this._pointPresenters.forEach((it) => it.setDefaultView());
   }
 }

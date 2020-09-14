@@ -61,7 +61,7 @@ const getOffers = (offers) => {
   );
 };
 
-const tripEventForm = (tripEvent) => {
+const tripEdit = (tripEvent) => {
   const {type, destination, description, offers, price, photos, startDate, endDate, isFavorite} = tripEvent;
   const typesTransferList = eventTypeList(EVENT_TYPES.slice(0, 7));
   const typesActivitiesList = eventTypeList(EVENT_TYPES.slice(7, 10));
@@ -148,19 +148,19 @@ const tripEventForm = (tripEvent) => {
   );
 };
 
-export default class TripEventForm extends SmartComponent {
+export default class TripEdit extends SmartComponent {
   constructor(event) {
     super();
     this._event = event;
-    // this._type = event.type;   не получается использовать
 
     this._favoriteHandler = null;
+    this._deleteHandler = null
     this._submitHandler = null;
     this._subscribeOnEvents();
   }
 
   getTemplate() {
-    return tripEventForm(this._event);
+    return tripEdit(this._event);
   }
 
   setSubmitHandler(handler) {
@@ -175,21 +175,26 @@ export default class TripEventForm extends SmartComponent {
       .addEventListener(`click`, handler);
   }
 
-  restoreHandlers() {
-    this._subscribeOnEvents();
-    this._recoveryListeners();
+  setDeleteClickHandler(handler) {
+    this._deleteHandler = handler;
+    this.getElement()
+      .querySelector(`.event__reset-btn`)
+      .addEventListener(`click`, handler);
   }
 
-  _recoveryListeners() {
+  restoreHandlers() {
+    this._subscribeOnEvents();
     this.setFavoriteClickHandler(this._favoriteHandler);
+    this.setDeleteClickHandler(this._deleteHandler);
     this.setSubmitHandler(this._submitHandler);
   }
 
   _subscribeOnEvents() {
     const element = this.getElement();
+    
     element
-      .querySelector(`.event__type-list`)
-      .addEventListener(`click`, (evt) => {
+    .querySelector(`.event__type-list`)
+    .addEventListener(`click`, (evt) => {
         if (evt.target.tagName === `INPUT`) {
           this._event.type = evt.target.value;
           this.rerender();

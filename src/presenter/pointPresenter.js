@@ -1,5 +1,5 @@
 import TripEvent from "../components/trip-event.js";
-import TripEventForm from "../components/trip-event-form.js";
+import TripEdit from "../components/trip-edit.js";
 import {renderElement, RenderPosition, replace, remove} from "../utils/render.js";
 
 const Mode = {
@@ -13,44 +13,45 @@ export default class PointPresenter {
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._tripEventComponent = null;
-    this._tripEventFormComponent = null;
+    this._tripEditComponent = null;
     this._mode = Mode.DEFAULT;
   }
 
   render(tripEvent) {
     const oldTripEventComponent = this._tripEventComponent;
-    const oldTripEventFormComponent = this._tripEventFormComponent;
+    const oldTripEditComponent = this._tripEditComponent;
 
     this._tripEventComponent = new TripEvent(tripEvent);
-    this._tripEventFormComponent = new TripEventForm(tripEvent);
+    this._tripEditComponent = new TripEdit(tripEvent);
 
     const onEscKeyDown = (evt) => {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
       if (isEscKey) {
-        this._replaceTripEventFormToTripEvent();
+        this._replaceTripEditToTripEvent();
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
 
     this._tripEventComponent.setClickHandler(() => {
-      this._replaceTripEventToTripFormEvent();
+      this._replaceTripEventToTripEdit();
       document.addEventListener(`keydown`, onEscKeyDown);
     });
 
-    this._tripEventFormComponent.setSubmitHandler((evt) => {
+    this._tripEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      this._replaceTripEventFormToTripEvent();
+      this._replaceTripEditToTripEvent();
+      document.removeEventListener(`keydown`, onEscKeyDown);
     });
 
-    this._tripEventFormComponent.setFavoriteClickHandler(() => {
+    this._tripEditComponent.setFavoriteClickHandler(() => {
       const newTripEvent = Object.assign({}, tripEvent, {isFavorite: !tripEvent.isFavorite});
       this._onDataChange(tripEvent, newTripEvent, this);
     });
 
-    if (oldTripEventComponent && oldTripEventFormComponent) {
+    if (oldTripEventComponent && oldTripEditComponent) {
       replace(this._tripEventComponent, oldTripEventComponent);
-      replace(this._tripEventFormComponent, oldTripEventFormComponent);
+      replace(this._tripEditComponent, oldTripEditComponent);
     } else {
       renderElement(
           this._container,
@@ -58,29 +59,28 @@ export default class PointPresenter {
           RenderPosition.BEFOREEND
       );
     }
-    // Нужен ли тут этот функционал?
     // remove(oldTripEventComponent);
-    // remove(oldTripEventFormComponent);
+    // remove(oldTripEditComponent);
   }
   destroy() {
     remove(this._tripEventComponent);
-    remove(this._tripEventFormComponent);
+    remove(this._tripEditComponent);
   }
 
-  _replaceTripEventFormToTripEvent() {
-    replace(this._tripEventComponent, this._tripEventFormComponent);
+  _replaceTripEditToTripEvent() {
+    replace(this._tripEventComponent, this._tripEditComponent);
     this._mode = Mode.DEFAULT;
   }
 
-  _replaceTripEventToTripFormEvent() {
+  _replaceTripEventToTripEdit() {
     this._onViewChange();
-    replace(this._tripEventFormComponent, this._tripEventComponent);
+    replace(this._tripEditComponent, this._tripEventComponent);
     this._mode = Mode.EDIT;
   }
 
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._replaceTripEventFormToTripEvent();
+      this._replaceTripEditToTripEvent();
     }
   }
 }
