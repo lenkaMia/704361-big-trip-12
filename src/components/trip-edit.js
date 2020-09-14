@@ -154,7 +154,7 @@ export default class TripEdit extends SmartComponent {
     this._event = event;
 
     this._favoriteHandler = null;
-    this._deleteHandler = null
+    this._deleteHandler = null;
     this._submitHandler = null;
     this._subscribeOnEvents();
   }
@@ -191,14 +191,14 @@ export default class TripEdit extends SmartComponent {
 
   _subscribeOnEvents() {
     const element = this.getElement();
-    
+
     element
     .querySelector(`.event__type-list`)
     .addEventListener(`click`, (evt) => {
-        if (evt.target.tagName === `INPUT`) {
-          this._event.type = evt.target.value;
-          this.rerender();
-        }
-      });
+      if (evt.target.tagName === `INPUT`) {
+        this._event.type = evt.target.value;
+        this.rerender();
+      }
+    });
   }
 }

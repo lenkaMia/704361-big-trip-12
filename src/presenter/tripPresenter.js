@@ -47,7 +47,6 @@ export default class TripPresenter {
 
   init(events) {
     this._events = events;
-    
     if (events.length === 0) {
       renderElement(
           this._container,
